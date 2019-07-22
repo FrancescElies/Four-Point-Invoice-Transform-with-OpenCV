@@ -1,7 +1,33 @@
+"""
+Four Point Invoice Transform with OpenCV
+
+https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
+
+Usage:
+    four_point_object_extractor.py [--log=LEVEL] FILES...
+    four_point_object_extractor.py (-h | --help | --version)
+
+Arguments:
+    FILES        files to apply the 4 point transformation
+
+Options:
+    -l, --log=<LEVEL>  Logging LEVEL [default: NOTSET]
+    -h, --help         Show this screen and exit.
+"""
+
+import logging
+import os
+import re
+
 import cv2
-import imutils
 import numpy as np
+from docopt import docopt
+from schema import And, Or, Schema, SchemaError
 from skimage import exposure
+
+logging.basicConfig()
+
+logger = logging.getLogger(__name__)
 
 
 #function to order points to proper rectangle
@@ -107,7 +133,8 @@ def findLargestCountours(cntList, cntWidths):
 
 
 #driver function which identifieng 4 corners and doing four point transformation
-def convert_object(image, screen_size = None, isDebug = False):
+def convert_object(file_path, screen_size = None, isDebug = False):
+    image = cv2.imread(file_path)
 
     # image = imutils.resize(image, height=300)
     # ratio = image.shape[0] / 300.0
@@ -125,6 +152,7 @@ def convert_object(image, screen_size = None, isDebug = False):
     # find contours in the edged image, keep only the largest
     # ones, and initialize our screen contour
 
+    countours, hierarcy = cv2.findContours(edged, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
 
     if isDebug : print('length of countours ', len(countours))
 
@@ -191,9 +219,55 @@ def convert_object(image, screen_size = None, isDebug = False):
         cv2.imshow("warp", warp)
         cv2.waitKey(0)
 
+    def save_image(src_file_path, image, suffix='-warped'):
+        """Given the original image name, saves a new modified image with
+        desired suffix.
+
+        If original image is located at:
+        '/Users/myuser/myfolder/myimage.jpg'
+        Saves modiffied image at:
+        '/Users/myuser/myfolder/myimage-warped.jpg'
+
+        :param src_file_path: Original file path
+        :param image: modified imagee
+        :param suffix: string to be added to the new image name
+        """
+
+        new_file_path = re.sub('\.(?P<extension>.*)$', f'{suffix}.\g<extension>', src_file_path)
+        cv2.imwrite(new_file_path, image)
+
+    save_image(file_path, warp)
+
+    if(screen_size):
         return cv2.cvtColor(cv2.resize(warp, screen_size), cv2.COLOR_GRAY2RGB)
     else:
         return cv2.cvtColor(warp, cv2.COLOR_GRAY2RGB)
 
 
-convert_object(cv2.imread('Sample3/Original.png'), isDebug=True)
+def main():
+    arguments = docopt(__doc__, version='0.0.0')
+
+    schema = Schema({
+        'FILES': [And(os.path.exists, error='FILE should exist')],
+        '--help': Or(True, False),
+        '--log': Or('DEBUG', 'NOTSET'),
+        '--version': Or(True, False),
+    })
+    try:
+        arguments = schema.validate(arguments)
+    except SchemaError as e:
+        exit(e)
+
+    log_level = arguments['--log']
+    if log_level:
+        logger.setLevel(logging.getLevelName(log_level.upper()))
+
+    logger.debug(arguments)
+
+    isDebug = True if arguments['--log'] == 'DEBUG' else False
+
+    for file_path in arguments['FILES']:
+        convert_object(file_path, isDebug=isDebug)
+
+if __name__ == '__main__':
+    main()
