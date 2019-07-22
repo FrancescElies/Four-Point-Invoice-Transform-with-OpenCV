@@ -4,8 +4,8 @@ Four Point Invoice Transform with OpenCV
 https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
 
 Usage:
-    four_point_object_extractor.py [--log=LEVEL] FILES...
-    four_point_object_extractor.py (-h | --help | --version)
+    photo_to_scanned.py [--log=LEVEL] FILES...
+    photo_to_scanned.py (-h | --help | --version)
 
 Arguments:
     FILES        files to apply the 4 point transformation
@@ -219,7 +219,7 @@ def convert_object(file_path, screen_size = None, isDebug = False):
         cv2.imshow("warp", warp)
         cv2.waitKey(0)
 
-    def save_image(src_file_path, image, suffix='-warped'):
+    def save_image(src_file_path, image, suffix='-scanned'):
         """Given the original image name, saves a new modified image with
         desired suffix.
 

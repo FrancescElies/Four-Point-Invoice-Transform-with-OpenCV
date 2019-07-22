@@ -12,7 +12,7 @@ before running the examples.
 
 ### Sample2 ###
 
-Run `python four_point_object_extractor.py sample2/original.png`
+Run `python photo_to_scanned.py sample2/original.png`
 
 <Table>
     <tr>
@@ -23,12 +23,12 @@ Run `python four_point_object_extractor.py sample2/original.png`
     <tr>
         <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample2/original.png" alt="original" width="400" height="500" align="middle"/></td>
         <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample2/screen.png" alt="Screen" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample2/original-warped.png" alt="Warped" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample2/original-scanned.png" alt="Warped" width="400" height="500" align="middle"/></td>
     </tr>
 </Table>
 
 ### Sample3 ###
-Run `python four_point_object_extractor.py sample3/original.png`
+Run `python photo_to_scanned.py sample3/original.png`
 
 <Table>
     <tr>
@@ -39,6 +39,6 @@ Run `python four_point_object_extractor.py sample3/original.png`
      <tr>
         <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample3/original.png" alt="original" width="400" height="500" align="middle"/></td>
         <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample3/screen.png" alt="Screen" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample3/original-warped.png" alt="Warped" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample3/original-scanned.png" alt="Warped" width="400" height="500" align="middle"/></td>
     </tr>
 </Table>
