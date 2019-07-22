@@ -125,7 +125,6 @@ def convert_object(image, screen_size = None, isDebug = False):
     # find contours in the edged image, keep only the largest
     # ones, and initialize our screen contour
 
-    _, countours, hierarcy = cv2.findContours(edged, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
 
     if isDebug : print('length of countours ', len(countours))
 
@@ -192,7 +191,6 @@ def convert_object(image, screen_size = None, isDebug = False):
         cv2.imshow("warp", warp)
         cv2.waitKey(0)
 
-    if(screen_size != None):
         return cv2.cvtColor(cv2.resize(warp, screen_size), cv2.COLOR_GRAY2RGB)
     else:
         return cv2.cvtColor(warp, cv2.COLOR_GRAY2RGB)
