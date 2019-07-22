@@ -20,9 +20,9 @@ Run `python four_point_object_extractor.py Sample2/original.png`
         <th>Warped Image</th>
     </tr>
     <tr>
-        <td><img src="https://raw.githubusercontent.com/KMKnation/Four-Point-Invoice-Transform-with-OpenCV/master/Sample2/Original.png" alt="Original" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/Sample2/original.png" alt="original" width="400" height="500" align="middle"/></td>
         <td><img src="https://raw.githubusercontent.com/KMKnation/Four-Point-Invoice-Transform-with-OpenCV/master/Sample2/%20Screen.png" alt="Screen" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/KMKnation/Four-Point-Invoice-Transform-with-OpenCV/master/Sample2/warp.png" alt="Warped" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/KMKnation/Four-Point-Invoice-Transform-with-OpenCV/master/Sample2/original-warped.png" alt="Warped" width="400" height="500" align="middle"/></td>
     </tr>
 </Table>
 
@@ -36,8 +36,8 @@ Run `python four_point_object_extractor.py Sample3/original.png`
         <th>Warped Image</th>
     </tr>
      <tr>
-        <td><img src="https://raw.githubusercontent.com/KMKnation/Four-Point-Invoice-Transform-with-OpenCV/master/Sample3/Original.png" alt="Original" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/KMKnation/Four-Point-Invoice-Transform-with-OpenCV/master/Sample3/original.png" alt="original" width="400" height="500" align="middle"/></td>
         <td><img src="https://raw.githubusercontent.com/KMKnation/Four-Point-Invoice-Transform-with-OpenCV/master/Sample3/%20Screen.png" alt="Screen" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/KMKnation/Four-Point-Invoice-Transform-with-OpenCV/master/Sample3/warp.png" alt="Warped" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/KMKnation/Four-Point-Invoice-Transform-with-OpenCV/master/Sample3/original-warped.png" alt="Warped" width="400" height="500" align="middle"/></td>
     </tr>
 </Table>
