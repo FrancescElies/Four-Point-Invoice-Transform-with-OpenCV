@@ -11,6 +11,7 @@ Before running the examples, create a virtual environment and install
 dependencies with `make init`, this will also add an entry point
 `photo-to-scan` from which you can call the script.
 
+Activate your virtualenv `source .venv/bin/activate`.
 
 ### Sample2 ###
 
