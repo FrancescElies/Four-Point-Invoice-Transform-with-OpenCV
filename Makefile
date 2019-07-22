@@ -1,5 +1,6 @@
 update-dependencies:
 	pip-compile requirements/main.in
+	pip install --upgrade -r requirements/main.txt
 
 install--pip-tools:
 	pip install pip-tools
