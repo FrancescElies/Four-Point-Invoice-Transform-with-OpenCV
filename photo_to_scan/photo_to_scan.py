@@ -4,8 +4,8 @@ Four Point Invoice Transform with OpenCV
 https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
 
 Usage:
-    photo_to_scanned.py [--log=LEVEL] FILES...
-    photo_to_scanned.py (-h | --help | --version)
+    photo-to-scan [--log=LEVEL] FILES...
+    photo-to-scan (-h | --help | --version)
 
 Arguments:
     FILES        files to apply the 4 point transformation

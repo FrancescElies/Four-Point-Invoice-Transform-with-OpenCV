@@ -12,7 +12,7 @@ before running the examples.
 
 ### Sample2 ###
 
-Run `python photo_to_scanned.py sample2/original.png`
+Run `photo-to-scan sample2/original.png`
 
 <Table>
     <tr>
@@ -28,7 +28,7 @@ Run `python photo_to_scanned.py sample2/original.png`
 </Table>
 
 ### Sample3 ###
-Run `python photo_to_scanned.py sample3/original.png`
+Run `photo-to-scan sample3/original.png`
 
 <Table>
     <tr>
