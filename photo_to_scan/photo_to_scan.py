@@ -30,7 +30,7 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 
 
-#function to order points to proper rectangle
+# function to order points to proper rectangle
 def order_points(pts):
     # initialzie a list of coordinates that will be ordered
     # such that the first entry in the list is the top-left,
@@ -55,7 +55,7 @@ def order_points(pts):
     return rect
 
 
-#function to transform image to four points
+# function to transform image to four points
 def four_point_transform(image, pts):
     # obtain a consistent order of the points and unpack them
     # individually
@@ -85,11 +85,15 @@ def four_point_transform(image, pts):
     # (i.e. top-down view) of the image, again specifying points
     # in the top-left, top-right, bottom-right, and bottom-left
     # order
-    dst = np.array([
-        [0, 0],
-        [maxWidth - 1, 0],
-        [maxWidth - 1, maxHeight - 1],
-        [0, maxHeight - 1]], dtype="float32")
+    dst = np.array(
+        [
+            [0, 0],
+            [maxWidth - 1, 0],
+            [maxWidth - 1, maxHeight - 1],
+            [0, maxHeight - 1],
+        ],
+        dtype="float32",
+    )
 
     # compute the perspective transform matrix and then apply it
     M = cv2.getPerspectiveTransform(rect, dst)
@@ -99,66 +103,74 @@ def four_point_transform(image, pts):
     return warped
 
 
-#function to find two largest countours which ones are may be
+# function to find two largest countours which ones are may be
 #  full image and our rectangle edged object
 def findLargestCountours(cntList, cntWidths):
     newCntList = []
     newCntWidths = []
 
-    #finding 1st largest rectangle
+    # finding 1st largest rectangle
     first_largest_cnt_pos = cntWidths.index(max(cntWidths))
 
     # adding it in new
     newCntList.append(cntList[first_largest_cnt_pos])
     newCntWidths.append(cntWidths[first_largest_cnt_pos])
 
-    #removing it from old
+    # removing it from old
     cntList.pop(first_largest_cnt_pos)
     cntWidths.pop(first_largest_cnt_pos)
 
-    #finding second largest rectangle
+    # finding second largest rectangle
     seccond_largest_cnt_pos = cntWidths.index(max(cntWidths))
 
     # adding it in new
     newCntList.append(cntList[seccond_largest_cnt_pos])
     newCntWidths.append(cntWidths[seccond_largest_cnt_pos])
 
-    #removing it from old
+    # removing it from old
     cntList.pop(seccond_largest_cnt_pos)
     cntWidths.pop(seccond_largest_cnt_pos)
 
-    print('Old Screen Dimentions filtered', cntWidths)
-    print('Screen Dimentions filtered', newCntWidths)
+    print("Old Screen Dimentions filtered", cntWidths)
+    print("Screen Dimentions filtered", newCntWidths)
     return newCntList, newCntWidths
 
 
-#driver function which identifieng 4 corners and doing four point transformation
-def convert_object(file_path, screen_size = None, isDebug = False):
+# driver function which identifieng 4 corners and doing four point transformation
+def convert_object(file_path, screen_size=None, isDebug=False):
     image = cv2.imread(file_path)
 
     # image = imutils.resize(image, height=300)
     # ratio = image.shape[0] / 300.0
 
-
     # convert the image to grayscale, blur it, and find edges
     # in the image
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    gray = cv2.bilateralFilter(gray, 11, 17, 17)  # 11  //TODO 11 FRO OFFLINE MAY NEED TO TUNE TO 5 FOR ONLINE
+    gray = cv2.bilateralFilter(
+        gray, 11, 17, 17
+    )  # 11  //TODO 11 FRO OFFLINE MAY NEED TO TUNE TO 5 FOR ONLINE
 
     gray = cv2.medianBlur(gray, 5)
     edged = cv2.Canny(gray, 30, 400)
 
-    if isDebug  : cv2.imshow('edged', edged)
+    if isDebug:
+        cv2.imshow("edged", edged)
     # find contours in the edged image, keep only the largest
     # ones, and initialize our screen contour
 
-    countours, hierarcy = cv2.findContours(edged, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+    countours, hierarcy = cv2.findContours(
+        edged, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE
+    )
 
-    if isDebug : print('length of countours ', len(countours))
+    if isDebug:
+        print("length of countours ", len(countours))
 
     imageCopy = image.copy()
-    if isDebug : cv2.imshow('drawn countours', cv2.drawContours(imageCopy, countours, -1, (0, 255, 0), 1))
-
+    if isDebug:
+        cv2.imshow(
+            "drawn countours",
+            cv2.drawContours(imageCopy, countours, -1, (0, 255, 0), 1),
+        )
 
     # approximate the contour
     cnts = sorted(countours, key=cv2.contourArea, reverse=True)
@@ -170,7 +182,7 @@ def convert_object(file_path, screen_size = None, isDebug = False):
         screenCnt = approx
         # print(len(approx))
 
-        if (len(screenCnt) == 4):
+        if len(screenCnt) == 4:
 
             (X, Y, W, H) = cv2.boundingRect(cnt)
             # print('X Y W H', (X, Y, W, H))
@@ -180,17 +192,25 @@ def convert_object(file_path, screen_size = None, isDebug = False):
         # else:
         #     print("4 points not found")
 
-    print('Screens found :', len(screenCntList))
-    print('Screen Dimentions', scrWidths)
+    print("Screens found :", len(screenCntList))
+    print("Screen Dimentions", scrWidths)
 
-    screenCntList, scrWidths = findLargestCountours(screenCntList, scrWidths)
+    screenCntList, scrWidths = findLargestCountours(
+        screenCntList, scrWidths
+    )
 
-    if not len(screenCntList) >=2: #there is no rectangle found
+    if not len(screenCntList) >= 2:  # there is no rectangle found
         return None
-    elif scrWidths[0] != scrWidths[1]: #mismatch in rect
+    elif scrWidths[0] != scrWidths[1]:  # mismatch in rect
         return None
 
-    if isDebug :   cv2.imshow(" Screen", cv2.drawContours(image.copy(), [screenCntList[0]], -1, (0, 255, 0), 3))
+    if isDebug:
+        cv2.imshow(
+            " Screen",
+            cv2.drawContours(
+                image.copy(), [screenCntList[0]], -1, (0, 255, 0), 3
+            ),
+        )
 
     # now that we have our screen contour, we need to determine
     # the top-left, top-right, bottom-right, and bottom-left
@@ -199,7 +219,7 @@ def convert_object(file_path, screen_size = None, isDebug = False):
     # our output rectangle in top-left, top-right, bottom-right,
     # and bottom-left order
     pts = screenCntList[0].reshape(4, 2)
-    print('Found bill rectagle at ', pts)
+    print("Found bill rectagle at ", pts)
     rect = order_points(pts)
     print(rect)
 
@@ -214,12 +234,12 @@ def convert_object(file_path, screen_size = None, isDebug = False):
     warp = exposure.rescale_intensity(warp, out_range=(0, 255))
 
     # show the original and warped images
-    if(isDebug):
+    if isDebug:
         cv2.imshow("Original", image)
         cv2.imshow("warp", warp)
         cv2.waitKey(0)
 
-    def save_image(src_file_path, image, suffix='-scanned'):
+    def save_image(src_file_path, image, suffix="-scanned"):
         """Given the original image name, saves a new modified image with
         desired suffix.
 
@@ -233,41 +253,50 @@ def convert_object(file_path, screen_size = None, isDebug = False):
         :param suffix: string to be added to the new image name
         """
 
-        new_file_path = re.sub('\.(?P<extension>.*)$', f'{suffix}.\g<extension>', src_file_path)
+        new_file_path = re.sub(
+            "\.(?P<extension>.*)$",
+            f"{suffix}.\g<extension>",
+            src_file_path,
+        )
         cv2.imwrite(new_file_path, image)
 
     save_image(file_path, warp)
 
-    if(screen_size):
-        return cv2.cvtColor(cv2.resize(warp, screen_size), cv2.COLOR_GRAY2RGB)
+    if screen_size:
+        return cv2.cvtColor(
+            cv2.resize(warp, screen_size), cv2.COLOR_GRAY2RGB
+        )
     else:
         return cv2.cvtColor(warp, cv2.COLOR_GRAY2RGB)
 
 
 def main():
-    arguments = docopt(__doc__, version='0.0.0')
+    arguments = docopt(__doc__, version="0.0.0")
 
-    schema = Schema({
-        'FILES': [And(os.path.exists, error='FILE should exist')],
-        '--help': Or(True, False),
-        '--log': Or('DEBUG', 'NOTSET'),
-        '--version': Or(True, False),
-    })
+    schema = Schema(
+        {
+            "FILES": [And(os.path.exists, error="FILE should exist")],
+            "--help": Or(True, False),
+            "--log": Or("DEBUG", "NOTSET"),
+            "--version": Or(True, False),
+        }
+    )
     try:
         arguments = schema.validate(arguments)
     except SchemaError as e:
         exit(e)
 
-    log_level = arguments['--log']
+    log_level = arguments["--log"]
     if log_level:
         logger.setLevel(logging.getLevelName(log_level.upper()))
 
     logger.debug(arguments)
 
-    isDebug = True if arguments['--log'] == 'DEBUG' else False
+    isDebug = True if arguments["--log"] == "DEBUG" else False
 
-    for file_path in arguments['FILES']:
+    for file_path in arguments["FILES"]:
         convert_object(file_path, isDebug=isDebug)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
