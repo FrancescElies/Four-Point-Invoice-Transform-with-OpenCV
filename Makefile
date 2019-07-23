@@ -18,5 +18,5 @@ clean-build:
 	rm --force --recursive dist/
 	rm --force --recursive *.egg-info
 
-dist:
+dist: clean-build
 	python3 setup.py sdist bdist_wheel
