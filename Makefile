@@ -20,3 +20,6 @@ clean-build:
 
 dist: clean-build
 	python3 setup.py sdist bdist_wheel
+
+upload-dist: dist
+	twine upload dist/*
