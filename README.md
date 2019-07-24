@@ -24,9 +24,9 @@ Run `photo-to-scan sample2/original.png`
         <th>Warped Image</th>
     </tr>
     <tr>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample2/original.png" alt="original" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample2/screen.png" alt="Screen" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample2/original-scanned.png" alt="Warped" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/samples/02/original.png" alt="original" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/samples/02/screen.png" alt="Screen" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/samples/02/original-scanned.png" alt="Warped" width="400" height="500" align="middle"/></td>
     </tr>
 </Table>
 
@@ -40,8 +40,8 @@ Run `photo-to-scan sample3/original.png`
         <th>Warped Image</th>
     </tr>
      <tr>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample3/original.png" alt="original" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample3/screen.png" alt="Screen" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/sample3/original-scanned.png" alt="Warped" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/samples/03/original.png" alt="original" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/samples/03/screen.png" alt="Screen" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/samples/03/original-scanned.png" alt="Warped" width="400" height="500" align="middle"/></td>
     </tr>
 </Table>
