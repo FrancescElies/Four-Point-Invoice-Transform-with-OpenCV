@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
-import photo_to_scan
+import image_to_scan
 
 package = "photo-to-scan"
-version = "0.0.1"
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
     name=package,
-    version=version,
+    version=image_to_scan.__version__,
     install_requires=[
         "opencv-python",
         "imutils",
@@ -27,10 +26,15 @@ setup(
     "four point transformation",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    include_package_data=True,
+    zip_safe=False,
     url="https://github.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV",
+    python_requires=">=3.6",
+    test_suite="tests.test_project",
     entry_points={
         "console_scripts": [
-            "photo-to-scan = photo_to_scan.__main__:main"
+            "image-to-scan = image_to_scan.__main__:main"
         ]
     },
     classifiers=[
