@@ -1,4 +1,4 @@
-.PHONY: init update-dependencies clean-build dist
+.PHONY: init update-dependencies clean-build dist publish
 
 update-dependencies:
 	pip-compile requirements/dev.in
@@ -9,17 +9,22 @@ install--dev-dependencies:
 	pip install --upgrade -r requirements/dev.txt
 
 init:
-	python3.7 -m virtualenv .venv
-	source .venv/bin/activate; pip install --upgrade -r requirements/main.txt
-	source .venv/bin/activate; pip install --editable .
+	python3.7 -m virtualenv venv
+	source venv/bin/activate; pip install --upgrade -r requirements/main.txt
+	source venv/bin/activate; pip install --editable .
 
 clean-build:
 	rm --force --recursive build/
 	rm --force --recursive dist/
 	rm --force --recursive *.egg-info
 
-dist: clean-build
-	python3 setup.py sdist bdist_wheel
+build: clean-build
+	python -m pip install --upgrade --quiet setuptools wheel twine
+	python setup.py sdist bdist_wheel
 
-upload-dist: dist
-	twine upload dist/*
+publish: build
+	python -m twine check dist/*
+	python -m twine upload dist/*
+
+test:
+	pytest
