@@ -6,7 +6,7 @@ The main entry point. Invoke as `photo-to-scan'
 """
 import sys
 
-from .photo_to_scan import main as _main
+from .image_to_scan import main as _main
 
 
 def main():

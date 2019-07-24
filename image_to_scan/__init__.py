@@ -5,3 +5,5 @@ it looks like as if you scanned it. Uses 4 Point OpenCV perspective
 transform.
 
 """
+
+__version__ = "0.0.1"
