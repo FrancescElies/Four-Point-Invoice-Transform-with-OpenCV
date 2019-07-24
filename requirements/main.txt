@@ -16,7 +16,7 @@ networkx==2.3             # via scikit-image
 numpy==1.16.4
 opencv-python==4.1.0.25
 pillow==6.1.0             # via imageio, scikit-image
-pyparsing==2.4.1          # via matplotlib
+pyparsing==2.4.0          # via matplotlib
 python-dateutil==2.8.0    # via matplotlib
 pywavelets==1.0.3         # via scikit-image
 schema==0.7.0
