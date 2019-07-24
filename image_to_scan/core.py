@@ -136,8 +136,30 @@ def findLargestCountours(cntList, cntWidths):
     return newCntList, newCntWidths
 
 
+def save_image(src_file_path, image, suffix="-scanned"):
+    """Given the original image name, saves a new modified image with
+    desired suffix.
+
+    If original image is located at:
+    '/Users/myuser/myfolder/myimage.jpg'
+    Saves modiffied image at:
+    '/Users/myuser/myfolder/myimage-warped.jpg'
+
+    :param src_file_path: Original file path
+    :param image: modified imagee
+    :param suffix: string to be added to the new image name
+    """
+
+    new_file_path = re.sub(
+        r"\.(?P<extension>.*)$",
+        fr"{suffix}.\g<extension>",
+        src_file_path,
+    )
+    cv2.imwrite(new_file_path, image)
+
+
 # driver function which identifieng 4 corners and doing four point transformation
-def convert_object(file_path, screen_size=None, isDebug=False):
+def convert_object(file_path, screen_size=None, new_file_suffix="-scanned", is_debug=False):
     image = cv2.imread(file_path)
 
     # image = imutils.resize(image, height=300)
@@ -153,8 +175,9 @@ def convert_object(file_path, screen_size=None, isDebug=False):
     gray = cv2.medianBlur(gray, 5)
     edged = cv2.Canny(gray, 30, 400)
 
-    if isDebug:
+    if is_debug:
         cv2.imshow("edged", edged)
+
     # find contours in the edged image, keep only the largest
     # ones, and initialize our screen contour
 
@@ -162,11 +185,11 @@ def convert_object(file_path, screen_size=None, isDebug=False):
         edged, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE
     )
 
-    if isDebug:
+    if is_debug:
         print("length of countours ", len(countours))
 
     imageCopy = image.copy()
-    if isDebug:
+    if is_debug:
         cv2.imshow(
             "drawn countours",
             cv2.drawContours(imageCopy, countours, -1, (0, 255, 0), 1),
@@ -204,7 +227,7 @@ def convert_object(file_path, screen_size=None, isDebug=False):
     elif scrWidths[0] != scrWidths[1]:  # mismatch in rect
         return None
 
-    if isDebug:
+    if is_debug:
         cv2.imshow(
             " Screen",
             cv2.drawContours(
@@ -234,33 +257,12 @@ def convert_object(file_path, screen_size=None, isDebug=False):
     warp = exposure.rescale_intensity(warp, out_range=(0, 255))
 
     # show the original and warped images
-    if isDebug:
+    if is_debug:
         cv2.imshow("Original", image)
         cv2.imshow("warp", warp)
         cv2.waitKey(0)
 
-    def save_image(src_file_path, image, suffix="-scanned"):
-        """Given the original image name, saves a new modified image with
-        desired suffix.
-
-        If original image is located at:
-        '/Users/myuser/myfolder/myimage.jpg'
-        Saves modiffied image at:
-        '/Users/myuser/myfolder/myimage-warped.jpg'
-
-        :param src_file_path: Original file path
-        :param image: modified imagee
-        :param suffix: string to be added to the new image name
-        """
-
-        new_file_path = re.sub(
-            r"\.(?P<extension>.*)$",
-            fr"{suffix}.\g<extension>",
-            src_file_path,
-        )
-        cv2.imwrite(new_file_path, image)
-
-    save_image(file_path, warp)
+    save_image(file_path, warp, suffix=new_file_suffix)
 
     if screen_size:
         return cv2.cvtColor(
@@ -292,10 +294,10 @@ def main():
 
     logger.debug(arguments)
 
-    isDebug = True if arguments["--log"] == "DEBUG" else False
+    is_debug = True if arguments["--log"] == "DEBUG" else False
 
     for file_path in arguments["FILES"]:
-        convert_object(file_path, isDebug=isDebug)
+        convert_object(file_path, is_debug=is_debug)
 
 
 if __name__ == "__main__":
