@@ -254,8 +254,8 @@ def convert_object(file_path, screen_size=None, isDebug=False):
         """
 
         new_file_path = re.sub(
-            "\.(?P<extension>.*)$",
-            f"{suffix}.\g<extension>",
+            r"\.(?P<extension>.*)$",
+            fr"{suffix}.\g<extension>",
             src_file_path,
         )
         cv2.imwrite(new_file_path, image)

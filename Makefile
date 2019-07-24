@@ -1,4 +1,4 @@
-.PHONY: init update-dependencies clean-build dist publish
+.PHONY: init update-dependencies clean-build dist publish lint test
 
 update-dependencies:
 	pip-compile requirements/dev.in
@@ -26,5 +26,8 @@ publish: build
 	python -m twine check dist/*
 	python -m twine upload dist/*
 
-test:
+test: lint
 	pytest
+
+lint:
+	flake8 image_to_scan

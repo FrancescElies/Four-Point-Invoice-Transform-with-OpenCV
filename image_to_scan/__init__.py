@@ -6,4 +6,6 @@ transform.
 
 """
 
+from .core import convert_object
+
 __version__ = "0.0.1"
