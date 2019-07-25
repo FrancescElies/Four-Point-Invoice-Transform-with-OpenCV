@@ -6,6 +6,11 @@ transform.
 
 """
 
-from .core import convert_object
+import pkg_resources
 
-__version__ = "0.0.1"
+from .core import convert_object  # noqa: F401
+
+try:
+    __version__ = pkg_resources.get_distribution('setuptools').version
+except Exception:
+    __version__ = 'unknown'

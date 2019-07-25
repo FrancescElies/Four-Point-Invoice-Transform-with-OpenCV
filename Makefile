@@ -27,7 +27,7 @@ publish: build
 	python -m twine upload dist/*
 
 test: lint
-	pytest
+	tox -e ALL
 
 lint:
 	flake8 image_to_scan
