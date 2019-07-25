@@ -131,8 +131,8 @@ def findLargestCountours(cntList, cntWidths):
     cntList.pop(seccond_largest_cnt_pos)
     cntWidths.pop(seccond_largest_cnt_pos)
 
-    print("Old Screen Dimentions filtered", cntWidths)
-    print("Screen Dimentions filtered", newCntWidths)
+    logger.debug("Old Screen Dimentions filtered %s", cntWidths)
+    logger.debug("Screen Dimentions filtered %s", newCntWidths)
     return newCntList, newCntWidths
 
 
@@ -159,7 +159,8 @@ def save_image(src_file_path, image, suffix="-scanned"):
 
 
 # driver function which identifieng 4 corners and doing four point transformation
-def convert_object(file_path, screen_size=None, new_file_suffix="-scanned", is_debug=False):
+def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
+    is_debug = True if logger.level == 10 else False
     image = cv2.imread(file_path)
 
     # image = imutils.resize(image, height=300)
@@ -185,8 +186,7 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned", is_d
         edged, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE
     )
 
-    if is_debug:
-        print("length of countours ", len(countours))
+    logger.debug("length of countours %s", len(countours))
 
     imageCopy = image.copy()
     if is_debug:
@@ -203,20 +203,20 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned", is_d
         peri = cv2.arcLength(cnt, True)  # cnts[1] always rectangle O.o
         approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
         screenCnt = approx
-        # print(len(approx))
+        # logger.debug(len(approx))
 
         if len(screenCnt) == 4:
 
             (X, Y, W, H) = cv2.boundingRect(cnt)
-            # print('X Y W H', (X, Y, W, H))
+            # logger.debug('X Y W H', (X, Y, W, H))
             screenCntList.append(screenCnt)
             scrWidths.append(W)
 
         # else:
-        #     print("4 points not found")
+        #     logger.debug("4 points not found")
 
-    print("Screens found :", len(screenCntList))
-    print("Screen Dimentions", scrWidths)
+    logger.debug("Screens found : %s", len(screenCntList))
+    logger.debug("Screen Dimentions %s", scrWidths)
 
     screenCntList, scrWidths = findLargestCountours(
         screenCntList, scrWidths
@@ -242,9 +242,9 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned", is_d
     # our output rectangle in top-left, top-right, bottom-right,
     # and bottom-left order
     pts = screenCntList[0].reshape(4, 2)
-    print("Found bill rectagle at ", pts)
+    logger.debug("Found bill rectagle at %s", pts)
     rect = order_points(pts)
-    print(rect)
+    logger.debug(rect)
 
     # apply the four point tranform to obtain a "birds eye view" of
     # the image
@@ -294,10 +294,8 @@ def main():
 
     logger.debug(arguments)
 
-    is_debug = True if arguments["--log"] == "DEBUG" else False
-
     for file_path in arguments["FILES"]:
-        convert_object(file_path, is_debug=is_debug)
+        convert_object(file_path)
 
 
 if __name__ == "__main__":
