@@ -10,12 +10,9 @@ pool:
   vmImage: 'ubuntu-latest'
 strategy:
   matrix:
-    Python35:
-      python.version: '3.5'
-    Python36:
-      python.version: '3.6'
     Python37:
       python.version: '3.7'
+      tox.env: py37
 
 steps:
 - task: UsePythonVersion@0
@@ -25,10 +22,17 @@ steps:
 
 - script: |
     python -m pip install --upgrade pip
-    pip install -r requirements/main.txt
-  displayName: 'Install dependencies'
+    pip install -r requirements/dev.txt
+  displayName: 'Install dev dependencies'
 
 - script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
+    tox -e manifest
+  displayName: 'test manifest'
+
+- script: |
+    tox -e package
+  displayName: 'test package'
+
+- script: |
+    tox -e py37
+  displayName: 'test py37'

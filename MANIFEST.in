@@ -9,6 +9,7 @@ recursive-include requirements *.in
 recursive-include requirements *.txt
 
 # tests
+include azure-pipelines.yml
 include tox.ini
 recursive-include tests *.png
 recursive-include tests *.py
