@@ -20,7 +20,7 @@ setup(
     ],
     description="Convert photos of documents made "
     "with a camera to a 'scanned' documents. "
-    "It will the documents' contour and apply a "
+    "It will take documents' contour and apply a "
     "four point transformation",
     long_description=long_description,
     long_description_content_type="text/markdown",
