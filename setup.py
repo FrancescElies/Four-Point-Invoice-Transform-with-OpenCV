@@ -12,9 +12,9 @@ setup(
     version="0.0.2",
     install_requires=[
         "opencv-python",
-        "imutils",
+        # "imutils",
         "numpy",
-        "scikit-image",
+        # "scikit-image",
         "docopt",
         "schema",
     ],
