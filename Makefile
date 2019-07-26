@@ -20,9 +20,13 @@ build: clean-build
 	python -m pip install --upgrade --quiet setuptools wheel twine
 	python setup.py sdist bdist_wheel
 
-publish: build
+publish-pypi: build
 	python -m twine check dist/*
 	python -m twine upload dist/*
+
+publish-testpypi: build
+	python -m twine check dist/*
+	python -m twine upload --repository testpypi dist/*
 
 test: lint
 	tox -e ALL
