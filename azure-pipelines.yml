@@ -10,6 +10,14 @@ pool:
   vmImage: 'ubuntu-latest'
 strategy:
   matrix:
+    Package:
+      python.version: '3.7'
+      tox.env: package
+
+    Manifest:
+      python.version: '3.7'
+      tox.env: manifest
+
     Python37:
       python.version: '3.7'
       tox.env: py37
@@ -26,13 +34,5 @@ steps:
   displayName: 'Install dev dependencies'
 
 - script: |
-    tox -e manifest
-  displayName: 'test manifest'
-
-- script: |
-    tox -e package
-  displayName: 'test package'
-
-- script: |
-    tox -e py37
-  displayName: 'test py37'
+    tox -e $(tox.env)
+  displayName: 'test `tox -e $(tox.env)`'
