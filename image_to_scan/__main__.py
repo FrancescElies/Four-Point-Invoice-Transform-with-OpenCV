@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 
-"""
-The main entry point. Invoke as `photo-to-scan'
+"""Main entry point.
+
+Invoke as `image-to-scan` or `python -m image_to_scan`
+
 """
 import sys
 

@@ -2,7 +2,7 @@
 
 from setuptools import find_packages, setup
 
-package = "photo-to-scan"
+package = "image-to-scan"
 
 with open("README.md", "r") as fh:
     long_description = fh.read()

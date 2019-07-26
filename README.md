@@ -9,13 +9,13 @@ I have customized the code of <a href="https://twitter.com/PyImageSearch">Adrian
 ## Run it ##
 Before running the examples, create a virtual environment and install
 dependencies with `make init`, this will also add an entry point
-`photo-to-scan` from which you can call the script.
+`image-to-scan` from which you can call the script.
 
 Activate your virtualenv `source venv/bin/activate`.
 
 ### Sample2 ###
 
-Run `photo-to-scan tests/samples/02/original.png`
+Run `image-to-scan tests/samples/02/original.png`
 
 <Table>
     <tr>
@@ -31,7 +31,7 @@ Run `photo-to-scan tests/samples/02/original.png`
 </Table>
 
 ### Sample3 ###
-Run `photo-to-scan tests/samples/03/original.png`
+Run `image-to-scan tests/samples/03/original.png`
 
 <Table>
     <tr>
