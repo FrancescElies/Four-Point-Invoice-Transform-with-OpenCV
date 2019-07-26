@@ -6,6 +6,9 @@ This code is inspired from <a href="https://www.pyimagesearch.com/2014/08/25/4-p
 
 I have customized the code of <a href="https://twitter.com/PyImageSearch">Adrian</a> to find <b>4 points</b> of document or rectangle dynamically. Here i have added <I>findLargestCountours</I> and <I>convert_object</I>, where convert_object is our driver method which actually doing image processing and getting all 4 point rectangles from image. After getting all 4 point rectangle list <I>findLargestCountours<I> method finding  largest countour in list.
 
+## Installation ##
+`pip install image_to_scan`
+
 ## Run it ##
 Before running the examples, create a virtual environment and install
 dependencies with `make init`, this will also add an entry point
