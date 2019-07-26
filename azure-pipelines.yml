@@ -36,7 +36,3 @@ steps:
 - script: |
     tox -e $(tox.env)
   displayName: 'test `tox -e $(tox.env)`'
-
-- publish: $(System.DefaultWorkingDirectory)/dist/image-to-scan.pex
-  artifact: image-to-scan.pex
-  condition: and(succeeded(), eq('${{ tox.env }}', 'package'))
