@@ -14,7 +14,7 @@ setup(
         "opencv-python-headless",
         # "imutils",
         "numpy",
-        # "scikit-image",
+        "scikit-image",
         "docopt",
         "schema",
     ],
