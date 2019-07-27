@@ -7,7 +7,7 @@ update-dependencies:
 
 init: clean-build
 	deactivate || true
-	rm -rf venv || true
+	rm -rf venv
 	python3.7 -m virtualenv venv
 	source venv/bin/activate; pip install --upgrade -r requirements/main.txt
 	pip install --upgrade -r requirements/dev.txt
