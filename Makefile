@@ -5,7 +5,9 @@ update-dependencies:
 	pip-compile --output-file requirements/main.txt
 	pip install --upgrade -r requirements/main.txt
 
-init:
+init: clean-build
+	deactivate || true
+	rm -rf venv || true
 	python3.7 -m virtualenv venv
 	source venv/bin/activate; pip install --upgrade -r requirements/main.txt
 	pip install --upgrade -r requirements/dev.txt
@@ -13,6 +15,8 @@ init:
 
 clean-build:
 	rm --force --recursive build/
+	rm --force --recursive .tox
+	rm --force --recursive .pytest_cache
 	rm --force --recursive dist/
 	rm --force --recursive *.egg-info
 
