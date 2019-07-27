@@ -12,11 +12,11 @@ setup(
     version="0.0.3",
     install_requires=[
         "opencv-python-headless",
-        # "imutils",
         "numpy",
-        "scikit-image",
         "docopt",
         "schema",
+        # "imutils",
+        # "scikit-image",
     ],
     description="Convert photos of documents made "
     "with a camera to a 'scanned' documents. "

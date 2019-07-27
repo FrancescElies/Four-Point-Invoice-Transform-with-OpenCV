@@ -23,7 +23,6 @@ import cv2
 import numpy as np
 from docopt import docopt
 from schema import And, Or, Schema, SchemaError
-from skimage import exposure
 
 logging.basicConfig()
 
@@ -159,7 +158,9 @@ def save_image(src_file_path, image, suffix="-scanned"):
 
 
 # driver function which identifieng 4 corners and doing four point transformation
-def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
+def convert_object(
+    file_path, screen_size=None, new_file_suffix="-scanned"
+):
     is_debug = True if logger.level == 10 else False
     image = cv2.imread(file_path)
 
@@ -254,7 +255,10 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
     # the intensity of the pixels to have minimum and maximum
     # values of 0 and 255, respectively
     warp = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
-    warp = exposure.rescale_intensity(warp, out_range=(0, 255))
+    # Replacement for `skimage.exposure.rescale_intensity`
+    # Contrast Limited Adaptive Histogram Equalization
+    clahe = cv2.createCLAHE(clipLimit=1.0, tileGridSize=(8, 8))
+    warp = clahe.apply(warp)
 
     # show the original and warped images
     if is_debug:
