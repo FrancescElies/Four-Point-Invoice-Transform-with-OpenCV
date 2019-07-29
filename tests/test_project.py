@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import filecmp
 import os
 
 import image_to_scan
@@ -11,10 +10,14 @@ class TestMiscellanea:
 
 
 class TestSamples:
+    def teardown_method(self, method):
+        os.remove(self.output_file)
+
     def test_sample_02(self):
-        input_file = "tests/samples/02/original.png"
-        reference_file = "tests/samples/02/original-scanned.png"
-        output_file = "tests/samples/02/original-test.png"
-        image_to_scan.convert_object(input_file, new_file_suffix="-test")
-        assert filecmp.cmp(reference_file, output_file)
-        os.remove(output_file)
+        input_file = "tests/samples/02/original.jpg"
+        input_file_no_ext = input_file.split(".")[0]
+        suffix = "warped"
+        extension = "jpg"
+        self.output_file = f"{input_file_no_ext}-{suffix}.{extension}"
+        image_to_scan.convert_object(input_file, new_file_suffix=f"-{suffix}")
+        assert os.path.exists(self.output_file)

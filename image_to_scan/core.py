@@ -4,15 +4,16 @@ Four Point Invoice Transform with OpenCV
 https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
 
 Usage:
-    image-to-scan [--log=LEVEL] FILES...
+    image-to-scan [--log=LEVEL] [--extension=EXTENSION] FILES...
     image-to-scan (-h | --help | --version)
 
 Arguments:
     FILES        files to apply the 4 point transformation
 
 Options:
-    -l, --log=<LEVEL>  Logging LEVEL [default: NOTSET]
-    -h, --help         Show this screen and exit.
+    -l, --log=<LEVEL>            Logging LEVEL [default: NOTSET]
+    -e, --extension=<EXTENSION>  Image EXTENSION, output format [default: jpg]
+    -h, --help                   Show this screen and exit.
 """
 
 import logging
@@ -135,7 +136,7 @@ def findLargestCountours(cntList, cntWidths):
     return newCntList, newCntWidths
 
 
-def save_image(src_file_path, image, suffix="-scanned"):
+def save_image(src_file_path, image, suffix="-scanned", extension="jpg"):
     """Given the original image name, saves a new modified image with
     desired suffix.
 
@@ -151,7 +152,7 @@ def save_image(src_file_path, image, suffix="-scanned"):
 
     new_file_path = re.sub(
         r"\.(?P<extension>.*)$",
-        fr"{suffix}.\g<extension>",
+        fr"{suffix}.{extension}",
         src_file_path,
     )
     cv2.imwrite(new_file_path, image)
@@ -284,6 +285,29 @@ def main():
             "FILES": [And(os.path.exists, error="FILE should exist")],
             "--help": Or(True, False),
             "--log": Or("DEBUG", "NOTSET"),
+            "--extension": Or(
+                # Windows bitmaps
+                "bmp", "dib",
+                # JPEG
+                "jpeg", "jpg", "jpe", "jp2",
+                # Portable Network Graphics
+                "png",
+                # WebP
+                "webp",
+                # Portable image format
+                "pbm", "pgm", "ppm", "pxm", "pnm",
+                # PFM
+                "pfm",
+                # Sun rasters
+                "sr",
+                "ras",
+                # TIFF
+                "tiff", "tif",
+                # OpenEXR Image
+                "exr",
+                # Radiance HDR
+                "hdr", "pic",
+            ),
             "--version": Or(True, False),
         }
     )
