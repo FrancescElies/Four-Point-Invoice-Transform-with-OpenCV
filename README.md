@@ -1,50 +1,49 @@
-# Four-Point-Invoice-Transform-with-OpenCV
+# image-to-scan: cli tool that transforms a photo of a document to a scanned document
 
-forked from [KMKnation/Four-Point-Invoice-Transform-with-OpenCV](https://github.com/KMKnation/Four-Point-Invoice-Transform-with-OpenCV)
+If you have an image of a document maybe you would like to crop
+everything outside the document and correct the angle from which the
+photo was taken, in that case this command line tool might help.
 
-This code is inspired from <a href="https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/">[4 Point OpenCV getPerspective Transform Example]</a>
+<details>
+<summary>Notes</summary>
+<pre style="display:block; font-family:monospace; margin: 1em 0; white-space: pre;">
+Originally forked from <a href="https://github.com/KMKnation/Four-Point-Invoice-Transform-with-OpenCV">KMKnation/Four-Point-Invoice-Transform-with-OpenCV</a>
 
-I have customized the code of <a href="https://twitter.com/PyImageSearch">Adrian</a> to find <b>4 points</b> of document or rectangle dynamically. Here i have added <I>findLargestCountours</I> and <I>convert_object</I>, where convert_object is our driver method which actually doing image processing and getting all 4 point rectangles from image. After getting all 4 point rectangle list <I>findLargestCountours<I> method finding  largest countour in list.
+This code is inspired from <a href="https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/">4 Point OpenCV getPerspective Transform Example</a>
+</pre>
+</details>
+
 
 ## Installation ##
-`pip install image_to_scan`
+- Via [pipx](https://pipxproject.github.io/pipx/) `pipx install image_to_scan` if you want to install inside an isolated environment.
+- Via pip `pip install image_to_scan` to an enviroment of your choice.
+
+After installing it an entry point `image-to-scan` will be added.
 
 ## Run it ##
-Before running the examples, create a virtual environment and install
-dependencies with `make init`, this will also add an entry point
-`image-to-scan` from which you can call the script.
-
-Activate your virtualenv `source venv/bin/activate`.
-
-### Sample2 ###
 
 Run `image-to-scan tests/samples/02/original.jpg`
 
 <Table>
     <tr>
         <th>Original Image</th>
-        <th>Edge Detection</th>
-        <th>Warped Image</th>
+        <th>Output Image</th>
     </tr>
     <tr>
         <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/02/original.jpg" alt="original" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/02/screen.jpg" alt="Screen" width="400" height="500" align="middle"/></td>
         <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/02/original-scanned.jpg" alt="Warped" width="400" height="500" align="middle"/></td>
     </tr>
 </Table>
 
-### Sample3 ###
 Run `image-to-scan tests/samples/03/original.jpg`
 
 <Table>
     <tr>
         <th>Original Image</th>
-        <th>Edge Detection</th>
-        <th>Warped Image</th>
+        <th>Output Image</th>
     </tr>
      <tr>
         <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/03/original.jpg" alt="original" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/03/screen.jpg" alt="Screen" width="400" height="500" align="middle"/></td>
         <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/03/original-scanned.jpg" alt="Warped" width="400" height="500" align="middle"/></td>
     </tr>
 </Table>
