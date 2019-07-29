@@ -9,7 +9,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name=package,
-    version="0.0.4",
+    version="0.0.5",
     install_requires=[
         "opencv-python-headless",
         "numpy",
