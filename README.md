@@ -18,7 +18,7 @@ Activate your virtualenv `source venv/bin/activate`.
 
 ### Sample2 ###
 
-Run `image-to-scan tests/samples/02/original.png`
+Run `image-to-scan tests/samples/02/original.jpg`
 
 <Table>
     <tr>
@@ -27,14 +27,14 @@ Run `image-to-scan tests/samples/02/original.png`
         <th>Warped Image</th>
     </tr>
     <tr>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/02/original.png" alt="original" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/02/screen.png" alt="Screen" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/02/original-scanned.png" alt="Warped" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/02/original.jpg" alt="original" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/02/screen.jpg" alt="Screen" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/02/original-scanned.jpg" alt="Warped" width="400" height="500" align="middle"/></td>
     </tr>
 </Table>
 
 ### Sample3 ###
-Run `image-to-scan tests/samples/03/original.png`
+Run `image-to-scan tests/samples/03/original.jpg`
 
 <Table>
     <tr>
@@ -43,8 +43,8 @@ Run `image-to-scan tests/samples/03/original.png`
         <th>Warped Image</th>
     </tr>
      <tr>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/03/original.png" alt="original" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/03/screen.png" alt="Screen" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/03/original-scanned.png" alt="Warped" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/03/original.jpg" alt="original" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/03/screen.jpg" alt="Screen" width="400" height="500" align="middle"/></td>
+        <td><img src="https://raw.githubusercontent.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV/master/tests/samples/03/original-scanned.jpg" alt="Warped" width="400" height="500" align="middle"/></td>
     </tr>
 </Table>
