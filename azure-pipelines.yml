@@ -10,35 +10,35 @@ trigger:
 strategy:
   matrix:
     # tests
-    linux-test:
+    linuxTest:
       imageName: 'ubuntu-latest'
       python.version: '3.7'
       tox.env: py37
-    mac-test:
+    macTest:
       imageName: 'macOS-latest'
       python.version: '3.7'
       tox.env: py37
-    windows-test:
+    windowsTest:
       imageName: 'windows-latest'
       python.version: '3.7'
       tox.env: py37
 
     # manifest
-    manifest-test:
+    manifestTest:
       python.version: '3.7'
       tox.env: manifest
       imageName: 'ubuntu-latest'
 
     # package
-    linux-package:
+    linuxPackage:
       imageName: 'ubuntu-latest'
       python.version: '3.7'
       tox.env: package
-    mac-package:
+    macPackage:
       imageName: 'macOS-latest'
       python.version: '3.7'
       tox.env: package
-    windows-package:
+    windowsPackage:
       imageName: 'windows-latest'
       python.version: '3.7'
       tox.env: package
@@ -63,5 +63,5 @@ steps:
   displayName: 'test `tox -e $(tox.env)`'
 
 - publish: $(System.DefaultWorkingDirectory)/dist/image-to-scan.pex
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Agent.JobName'], 'windows-package'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Agent.JobName'], 'windowsPackage'))
   artifact: PexApp
