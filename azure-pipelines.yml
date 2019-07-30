@@ -60,3 +60,7 @@ steps:
 - script: |
     tox -e $(tox.env)
   displayName: 'test `tox -e $(tox.env)`'
+
+- publish: $(System.DefaultWorkingDirectory)/dist/image-to-scan.pex
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Agent.JobName'], 'windows-package'))
+  artifact: PexApp
