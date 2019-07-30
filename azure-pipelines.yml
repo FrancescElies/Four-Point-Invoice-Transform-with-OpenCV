@@ -6,21 +6,45 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
 strategy:
   matrix:
-    Package:
+    # tests
+    linux-test:
+      imageName: 'ubuntu-latest'
+      python.version: '3.7'
+      tox.env: py37
+    mac-test:
+      imageName: 'macOS-latest'
+      python.version: '3.7'
+      tox.env: py37
+    windows-test:
+      imageName: 'windows-latest'
+      python.version: '3.7'
+      tox.env: py37
+
+    # manifest
+    manifest-test:
+      python.version: '3.7'
+      tox.env: manifest
+      imageName: 'ubuntu-latest'
+
+    # package
+    linux-package:
+      imageName: 'ubuntu-latest'
+      python.version: '3.7'
+      tox.env: package
+    mac-package:
+      imageName: 'macOS-latest'
+      python.version: '3.7'
+      tox.env: package
+    windows-package:
+      imageName: 'windows-latest'
       python.version: '3.7'
       tox.env: package
 
-    Manifest:
-      python.version: '3.7'
-      tox.env: manifest
+pool:
+  vmImage: $(imageName)
 
-    Python37:
-      python.version: '3.7'
-      tox.env: py37
 
 steps:
 - task: UsePythonVersion@0
