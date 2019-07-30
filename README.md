@@ -40,20 +40,3 @@ Run `image-to-scan tests/samples/02/original.jpg`
         <td><code>tests/samples/02/original-scanned.jpg</code></td>
     </tr>
 </Table>
-
-Run `image-to-scan tests/samples/03/original.jpg`
-
-<Table>
-    <tr>
-        <th>Original Image</th>
-        <th>Output Image</th>
-    </tr>
-     <tr>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/image-to-scan/master/tests/samples/03/original.jpg" alt="original" width="400" height="500" align="middle"/></td>
-        <td><img src="https://raw.githubusercontent.com/FrancescElies/image-to-scan/master/tests/samples/03/original-scanned.jpg" alt="Warped" width="400" height="500" align="middle"/></td>
-    </tr>
-    <tr>
-        <td><code>tests/samples/03/original.jpg</code></td>
-        <td><code>tests/samples/03/original-scanned.jpg</code></td>
-    </tr>
-</Table>
