@@ -3,7 +3,7 @@
 from setuptools import find_packages, setup
 
 package = "image-to-scan"
-
+description = "command line tool that transforms a photo of a document to a scanned document"
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
@@ -18,23 +18,16 @@ setup(
         # "imutils",
         # "scikit-image",
     ],
-    description="Convert photos of documents made "
-    "with a camera to a 'scanned' documents. "
-    "It will take documents' contour and apply a "
-    "four point transformation",
+    description=description,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    packages=find_packages(exclude=["tests"]),
     include_package_data=True,
     zip_safe=False,
-    url="https://github.com/FrancescElies/Four-Point-Invoice-Transform-with-OpenCV",
+    url="https://github.com/FrancescElies/image-to-scan",
     python_requires=">=3.0",
     test_suite="tests.test_project",
-    entry_points={
-        "console_scripts": [
-            "image-to-scan = image_to_scan.__main__:main"
-        ]
-    },
+    entry_points={"console_scripts": ["image-to-scan = image_to_scan.__main__:main"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
