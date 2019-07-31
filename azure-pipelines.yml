@@ -61,9 +61,17 @@ stages:
       parameters:
         toxEnv: $(tox.env) -- -o dist/$(imageName)/image-to-scan
 
-    - publish: $(System.DefaultWorkingDirectory)/dist/$(imageName)/image-to-scan
+    - publish: $(Build.ArtifactStagingDirectory)/dist/$(imageName)/image-to-scan
       condition: and(
                   succeeded(),
                   eq(variables['Build.SourceBranch'], 'refs/heads/master')
                  )
       artifact: pex-app-$(imageName)
+
+    - task: GithubRelease@0
+      displayName: 'Create GitHub Release'
+      condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/release-v')
+      inputs:
+        gitHubConnection: FrancescElies
+        repositoryName: FrancescElies/image-to-scan
+        assets: $(Build.ArtifactStagingDirectory)/dist/$(imageName)/image-to-scan
