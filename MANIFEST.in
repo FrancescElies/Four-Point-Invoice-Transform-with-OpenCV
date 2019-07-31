@@ -10,7 +10,7 @@ recursive-include requirements *.txt
 
 # tests
 include azure-pipelines.yml
-recursive-include azure-templates
+recursive-include azure-templates *.yml
 include tox.ini
 recursive-include tests *.jpg
 recursive-include tests *.py
