@@ -29,19 +29,19 @@ strategy:
       tox.env: manifest
       imageName: 'ubuntu-latest'
 
-    # package
-    linuxPackage:
+    # packaging
+    linuxPackaging:
       imageName: 'ubuntu-latest'
       python.version: '3.7'
-      tox.env: package
-    macPackage:
+      tox.env: packaging
+    macPackaging:
       imageName: 'macOS-latest'
       python.version: '3.7'
-      tox.env: package
-    windowsPackage:
+      tox.env: packaging
+    windowsPackaging:
       imageName: 'windows-latest'
       python.version: '3.7'
-      tox.env: package
+      tox.env: packaging
 
 pool:
   vmImage: $(imageName)
@@ -63,5 +63,8 @@ steps:
   displayName: 'test `tox -e $(tox.env)`'
 
 - publish: $(System.DefaultWorkingDirectory)/dist/image-to-scan.pex
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Agent.JobName'], 'Job windowsPackage'))
+  condition: and(
+                  succeeded(),
+                  eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+                  contains(variables['Agent.JobName'], 'Packaging'))
   artifact: PexApp
