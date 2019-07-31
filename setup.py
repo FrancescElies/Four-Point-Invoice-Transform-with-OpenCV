@@ -15,6 +15,7 @@ setup(
         "numpy",
         "docopt",
         "schema",
+        "setuptools",
         # "imutils",
         # "scikit-image",
     ],
