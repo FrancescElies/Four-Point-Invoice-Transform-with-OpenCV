@@ -4,57 +4,66 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 # see https://github.com/microsoft/azure-pipelines-yaml
-trigger:
-- master
+stages:
+- stage: Tests
+  jobs:
+  - job: Test
+    strategy:
+      matrix:
+        # tests
+        linuxTest:
+          imageName: 'ubuntu-latest'
+          python.version: '3.7'
+          tox.env: py37
+        macTest:
+          imageName: 'macOS-latest'
+          python.version: '3.7'
+          tox.env: py37
+        windowsTest:
+          imageName: 'windows-latest'
+          python.version: '3.7'
+          tox.env: py37
 
-strategy:
-  matrix:
-    # tests
-    linuxTest:
-      imageName: 'ubuntu-latest'
-      python.version: '3.7'
-      tox.env: py37
-    macTest:
-      imageName: 'macOS-latest'
-      python.version: '3.7'
-      tox.env: py37
-    windowsTest:
-      imageName: 'windows-latest'
-      python.version: '3.7'
-      tox.env: py37
+        # manifest
+        manifestTest:
+          python.version: '3.7'
+          tox.env: manifest
+          imageName: 'ubuntu-latest'
+    pool:
+      vmImage: $(imageName)
+    steps:
+    - template: azure-templates/python-steps.yml
+      parameters:
+        toxEnv: $(tox.env)
 
-    # manifest
-    manifestTest:
-      python.version: '3.7'
-      tox.env: manifest
-      imageName: 'ubuntu-latest'
+- stage: Packages
+  jobs:
+  - job: Packaging
+    strategy:
+      matrix:
+        # packaging
+        linuxPackaging:
+          imageName: 'ubuntu-latest'
+          python.version: '3.7'
+          tox.env: packaging
+        macPackaging:
+          imageName: 'macOS-latest'
+          python.version: '3.7'
+          tox.env: packaging
+        windowsPackaging:
+          imageName: 'windows-latest'
+          python.version: '3.7'
+          tox.env: packaging
+    pool:
+      vmImage: $(imageName)
+    steps:
+    - template: azure-templates/python-steps.yml
+      parameters:
+        toxEnv: $(tox.env)
 
-    # packaging
-    linuxPackaging:
-      imageName: 'ubuntu-latest'
-      python.version: '3.7'
-      tox.env: packaging
-    macPackaging:
-      imageName: 'macOS-latest'
-      python.version: '3.7'
-      tox.env: packaging
-    windowsPackaging:
-      imageName: 'windows-latest'
-      python.version: '3.7'
-      tox.env: packaging
-
-pool:
-  vmImage: $(imageName)
-
-
-steps:
-- template: azure-templates/python-steps.yml
-  parameters:
-    toxEnv: $(tox.env)
-
-- publish: $(System.DefaultWorkingDirectory)/dist/image-to-scan.pex
-  condition: and(
-                  succeeded(),
-                  eq(variables['Build.SourceBranch'], 'refs/heads/master'),
-                  contains(variables['Agent.JobName'], 'Packaging'))
-  artifact: PexApp
+    - publish: $(System.DefaultWorkingDirectory)/dist/image-to-scan.pex
+      condition: and(
+                      succeeded(),
+                      eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+                      contains(variables['Agent.JobName'], 'Packaging'))
+      artifact: PexApp
