@@ -59,11 +59,11 @@ stages:
     steps:
     - template: azure-templates/python-steps.yml
       parameters:
-        toxEnv: $(tox.env)
+        toxEnv: $(tox.env) -- -o dist/$(imageName)/image-to-scan
 
-    - publish: $(System.DefaultWorkingDirectory)/dist/image-to-scan.pex
+    - publish: $(System.DefaultWorkingDirectory)/dist/$(imageName)/image-to-scan
       condition: and(
-                      succeeded(),
-                      eq(variables['Build.SourceBranch'], 'refs/heads/master'),
-                      contains(variables['Agent.JobName'], 'Packaging'))
+                  succeeded(),
+                  eq(variables['Build.SourceBranch'], 'refs/heads/master')
+                 )
       artifact: PexApp

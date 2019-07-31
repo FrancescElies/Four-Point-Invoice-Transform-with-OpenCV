@@ -23,6 +23,7 @@ clean-build:
 build: clean-build
 	python -m pip install --upgrade --quiet setuptools wheel twine
 	python setup.py sdist bdist_wheel
+	tox -e packaging -- -o dist/pex-$(uname)/image-to-scan
 
 publish-pypi: build
 	python -m twine check dist/*
