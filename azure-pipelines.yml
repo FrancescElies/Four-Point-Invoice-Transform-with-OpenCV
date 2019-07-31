@@ -72,6 +72,5 @@ stages:
       displayName: 'Create GitHub Release'
       condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/release-v')
       inputs:
-        gitHubConnection: FrancescElies
-        repositoryName: FrancescElies/image-to-scan
+        gitHubConnection: image-to-scan
         assets: $(Build.ArtifactStagingDirectory)/dist/$(imageName)/image-to-scan
