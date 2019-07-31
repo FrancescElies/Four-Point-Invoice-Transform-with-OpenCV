@@ -66,4 +66,4 @@ stages:
                   succeeded(),
                   eq(variables['Build.SourceBranch'], 'refs/heads/master')
                  )
-      artifact: PexApp
+      artifact: pex-app-$(imageName)
