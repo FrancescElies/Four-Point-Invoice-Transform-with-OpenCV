@@ -70,7 +70,7 @@ stages:
 
     - task: GithubRelease@0
       displayName: 'Create GitHub Release'
-      condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/release-v')
+      condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
       inputs:
         gitHubConnection: image-to-scan
         assets: $(System.DefaultWorkingDirectory)/dist/$(imageName)/image-to-scan
