@@ -11,15 +11,15 @@ stages:
     strategy:
       matrix:
         # tests
-        linuxTest:
+        linuxTestPY37:
           imageName: 'ubuntu-latest'
           python.version: '3.7'
           tox.env: py37
-        macTest:
+        macTestPY37:
           imageName: 'macOS-latest'
           python.version: '3.7'
           tox.env: py37
-        windowsTest:
+        windowsTestPY37:
           imageName: 'windows-latest'
           python.version: '3.7'
           tox.env: py37
