@@ -3,7 +3,7 @@
 from setuptools import find_packages, setup
 
 package = "image-to-scan"
-description = "command line tool that transforms a photo of a document to a scanned document"
+description = "Helps you transform a photo to a scanned document"
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
@@ -28,7 +28,11 @@ setup(
     url="https://github.com/FrancescElies/image-to-scan",
     python_requires=">=3.0",
     test_suite="tests.test_project",
-    entry_points={"console_scripts": ["image-to-scan = image_to_scan.__main__:main"]},
+    entry_points={
+        "console_scripts": [
+            "image-to-scan = image_to_scan.app:app"
+        ]
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",

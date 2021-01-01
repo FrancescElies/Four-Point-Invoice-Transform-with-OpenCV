@@ -1,21 +1,3 @@
-"""
-Four Point Invoice Transform with OpenCV
-
-https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
-
-Usage:
-    image-to-scan [--log=LEVEL] [--extension=EXTENSION] FILES...
-    image-to-scan (-h | --help | --version)
-
-Arguments:
-    FILES        files to apply the 4 point transformation
-
-Options:
-    -l, --log=<LEVEL>            Logging LEVEL [default: NOTSET]
-    -e, --extension=<EXTENSION>  Image EXTENSION, output format [default: jpg]
-    -h, --help                   Show this screen and exit.
-"""
-
 import logging
 import os
 import re
@@ -27,7 +9,7 @@ from schema import And, Or, Schema, SchemaError
 
 logging.basicConfig()
 
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 # function to order points to proper rectangle
@@ -131,8 +113,8 @@ def findLargestCountours(cntList, cntWidths):
     cntList.pop(seccond_largest_cnt_pos)
     cntWidths.pop(seccond_largest_cnt_pos)
 
-    logger.debug("Old Screen Dimentions filtered %s", cntWidths)
-    logger.debug("Screen Dimentions filtered %s", newCntWidths)
+    log.debug("Old Screen Dimentions filtered %s", cntWidths)
+    log.debug("Screen Dimentions filtered %s", newCntWidths)
     return newCntList, newCntWidths
 
 
@@ -162,7 +144,7 @@ def save_image(src_file_path, image, suffix="-scanned", extension="jpg"):
 def convert_object(
     file_path, screen_size=None, new_file_suffix="-scanned"
 ):
-    is_debug = True if logger.level == 10 else False
+    is_debug = True if log.level == 10 else False
     image = cv2.imread(file_path)
 
     # image = imutils.resize(image, height=300)
@@ -188,7 +170,7 @@ def convert_object(
         edged, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE
     )
 
-    logger.debug("length of countours %s", len(countours))
+    log.debug("length of countours %s", len(countours))
 
     imageCopy = image.copy()
     if is_debug:
@@ -205,20 +187,20 @@ def convert_object(
         peri = cv2.arcLength(cnt, True)  # cnts[1] always rectangle O.o
         approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
         screenCnt = approx
-        # logger.debug(len(approx))
+        # log.debug(len(approx))
 
         if len(screenCnt) == 4:
 
             (X, Y, W, H) = cv2.boundingRect(cnt)
-            # logger.debug('X Y W H', (X, Y, W, H))
+            # log.debug('X Y W H', (X, Y, W, H))
             screenCntList.append(screenCnt)
             scrWidths.append(W)
 
         # else:
-        #     logger.debug("4 points not found")
+        #     log.debug("4 points not found")
 
-    logger.debug("Screens found : %s", len(screenCntList))
-    logger.debug("Screen Dimentions %s", scrWidths)
+    log.debug("Screens found : %s", len(screenCntList))
+    log.debug("Screen Dimentions %s", scrWidths)
 
     screenCntList, scrWidths = findLargestCountours(
         screenCntList, scrWidths
@@ -244,9 +226,9 @@ def convert_object(
     # our output rectangle in top-left, top-right, bottom-right,
     # and bottom-left order
     pts = screenCntList[0].reshape(4, 2)
-    logger.debug("Found bill rectagle at %s", pts)
+    log.debug("Found bill rectagle at %s", pts)
     rect = order_points(pts)
-    logger.debug(rect)
+    log.debug(rect)
 
     # apply the four point tranform to obtain a "birds eye view" of
     # the image
@@ -277,54 +259,3 @@ def convert_object(
         return cv2.cvtColor(warp, cv2.COLOR_GRAY2RGB)
 
 
-def main():
-    arguments = docopt(__doc__, version="0.0.0")
-
-    schema = Schema(
-        {
-            "FILES": [And(os.path.exists, error="FILE should exist")],
-            "--help": Or(True, False),
-            "--log": Or("DEBUG", "NOTSET"),
-            "--extension": Or(
-                # Windows bitmaps
-                "bmp", "dib",
-                # JPEG
-                "jpeg", "jpg", "jpe", "jp2",
-                # Portable Network Graphics
-                "png",
-                # WebP
-                "webp",
-                # Portable image format
-                "pbm", "pgm", "ppm", "pxm", "pnm",
-                # PFM
-                "pfm",
-                # Sun rasters
-                "sr",
-                "ras",
-                # TIFF
-                "tiff", "tif",
-                # OpenEXR Image
-                "exr",
-                # Radiance HDR
-                "hdr", "pic",
-            ),
-            "--version": Or(True, False),
-        }
-    )
-    try:
-        arguments = schema.validate(arguments)
-    except SchemaError as e:
-        exit(e)
-
-    log_level = arguments["--log"]
-    if log_level:
-        logger.setLevel(logging.getLevelName(log_level.upper()))
-
-    logger.debug(arguments)
-
-    for file_path in arguments["FILES"]:
-        convert_object(file_path)
-
-
-if __name__ == "__main__":
-    main()
