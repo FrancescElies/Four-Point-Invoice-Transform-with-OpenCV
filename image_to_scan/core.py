@@ -11,18 +11,17 @@ logging.basicConfig()
 
 log = logging.getLogger(__name__)
 
+
 def previewImage(window_name: str,
                  image: np.ndarray,
                  wait_miliseconds_before_destroy: int = 2000):
-    import ipdb; ipdb.set_trace(context=8)  # XXX (cesc)
-
     log.debug(f"Showing {window_name}")
     cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
     cv2.setWindowProperty(window_name,
-                            prop_id=cv2.WND_PROP_FULLSCREEN,
-                            prop_value=cv2.WINDOW_NORMAL)
+                          prop_id=cv2.WND_PROP_FULLSCREEN,
+                          prop_value=cv2.WINDOW_NORMAL)
 
-    cv2.imshow(window_name,image)
+    cv2.imshow(window_name, image)
     cv2.waitKey(wait_miliseconds_before_destroy)
     cv2.destroyAllWindows()
 
@@ -44,9 +43,9 @@ def order_points(pts):
 
     # the top-left point will have the smallest sum, whereas
     # the bottom-right point will have the largest sum
-    s = pts.sum(axis=1)
-    rect[0] = pts[np.argmin(s)]
-    rect[2] = pts[np.argmax(s)]
+    _sum = pts.sum(axis=1)
+    rect[0] = pts[np.argmin(_sum)]
+    rect[2] = pts[np.argmax(_sum)]
 
     # now, compute the difference between the points, the
     # top-right point will have the smallest difference,
