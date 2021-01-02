@@ -205,14 +205,15 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
     polygonWidths = []
     for contour in contourAreas:
         peri = cv2.arcLength(contour.curve, True)
-        approxPolygon = cv2.approxPolyDP(contour.curve,
-                                         epsilon=0.02 * peri,  # approximation accuracy
-                                         closed=True)
+        polygon_less_vertices = cv2.approxPolyDP(contour.curve,
+                                                 epsilon=0.02 * peri,  # approximation accuracy
+                                                 closed=True)
 
-        if len(approxPolygon) == 4:
+        num_vertices = len(polygon_less_vertices)
+        if num_vertices == 4:
             (X, Y, W, H) = cv2.boundingRect(contour.curve)
             log.debug(f'X={X} Y={Y} W={W} H={H}')
-            four_edge_polygons.append(approxPolygon)
+            four_edge_polygons.append(polygon_less_vertices)
             polygonWidths.append(W)
 
     log.debug("Screens found : %s", len(four_edge_polygons))
