@@ -60,6 +60,8 @@ def order_points(pts):
 
 
 def transform_to_four_points(image, pts):
+    """Apply the four point tranform to obtain a "birds eye view" of the image """
+
     # obtain a consistent order of the points and unpack them
     # individually
     rect = order_points(pts)
@@ -216,7 +218,6 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
     log.debug("Screens found : %s", len(four_edge_polygons))
     previewContours(imageCopy, four_edge_polygons)
     log.debug("Screen Dimentions %s", polygonWidths)
-    import ipdb; ipdb.set_trace(context=8)  # XXX (cesc)
 
     four_edge_polygons, polygonWidths = findLargestContours(
         four_edge_polygons, polygonWidths
@@ -242,8 +243,6 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
     rect = order_points(pts)
     log.debug(rect)
 
-    # apply the four point tranform to obtain a "birds eye view" of
-    # the image
     warped = transform_to_four_points(image, pts)
 
     # convert the warped image to grayscale and then adjust
