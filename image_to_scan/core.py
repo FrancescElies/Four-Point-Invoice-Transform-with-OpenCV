@@ -113,38 +113,41 @@ def transform_to_four_points(image, pts):
     return warped
 
 
-def findLargestContours(cntList, cntWidths):
+def findLargestContours(screens):
     """Finds two largest contours, they may be, our full image and our rectangle
     edged object.
 
     """
+    contours = [x.fourpoints for x in screens]
+    contour_widths = [x.width for x in screens]
+
     newCntList = []
     newCntWidths = []
 
     # finding 1st largest rectangle
-    first_largest_cnt_pos = cntWidths.index(max(cntWidths))
+    first_largest_cnt_pos = contour_widths.index(max(contour_widths))
 
     # adding it in new
-    newCntList.append(cntList[first_largest_cnt_pos])
-    newCntWidths.append(cntWidths[first_largest_cnt_pos])
+    newCntList.append(contours[first_largest_cnt_pos])
+    newCntWidths.append(contour_widths[first_largest_cnt_pos])
 
     # removing it from old
-    cntList.pop(first_largest_cnt_pos)
-    cntWidths.pop(first_largest_cnt_pos)
+    contours.pop(first_largest_cnt_pos)
+    contour_widths.pop(first_largest_cnt_pos)
 
     # finding second largest rectangle
-    seccond_largest_cnt_pos = cntWidths.index(max(cntWidths))
+    seccond_largest_cnt_pos = contour_widths.index(max(contour_widths))
 
     # adding it in new
-    newCntList.append(cntList[seccond_largest_cnt_pos])
-    newCntWidths.append(cntWidths[seccond_largest_cnt_pos])
+    newCntList.append(contours[seccond_largest_cnt_pos])
+    newCntWidths.append(contour_widths[seccond_largest_cnt_pos])
 
     # removing it from old
-    cntList.pop(seccond_largest_cnt_pos)
-    cntWidths.pop(seccond_largest_cnt_pos)
+    contours.pop(seccond_largest_cnt_pos)
+    contour_widths.pop(seccond_largest_cnt_pos)
 
-    log.debug("findLargestContours: Old Screen Dimentions filtered %s", cntWidths)
-    log.debug("findLargestContours: Screen Dimentions filtered %s", newCntWidths)
+    log.debug("Old Screen Dimentions filtered %s", contour_widths)
+    log.debug("Screen Dimentions filtered %s", newCntWidths)
     return newCntList, newCntWidths
 
 
@@ -206,8 +209,8 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
     if debug:
         previewContours(imageCopy, [x.curve for x in contourAreas])
 
-    four_edge_polygons = []
-    polygonWidths = []
+    Screen = namedtuple('Screen', ['fourpoints', 'width'])
+    screens = []  # 4 point polygons, repressenting possible screens (rectangles)
     for contour in contourAreas:
         peri = cv2.arcLength(contour.curve, True)
         polygon_less_vertices = cv2.approxPolyDP(contour.curve,
@@ -216,27 +219,24 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
 
         num_vertices = len(polygon_less_vertices)
         if num_vertices == 4:
-            (X, Y, W, H) = cv2.boundingRect(contour.curve)
-            log.debug(f'X={X} Y={Y} W={W} H={H}')
-            four_edge_polygons.append(polygon_less_vertices)
-            polygonWidths.append(W)
+            (x, y, width, height) = cv2.boundingRect(contour.curve)
+            log.debug(f'x={x} y={y} width={width} height={height}')
+            screens.append(Screen(fourpoints=polygon_less_vertices, width=width))
 
-    log.debug("Screens found : %s", len(four_edge_polygons))
-    previewContours(imageCopy, four_edge_polygons)
-    log.debug("Screen Dimentions %s", polygonWidths)
+    log.debug(f"Screens found {len(screens)}: {screens}")
+    previewContours(imageCopy, [x.fourpoints for x in screens])
 
-    four_edge_polygons, polygonWidths = findLargestContours(
-        four_edge_polygons, polygonWidths
-    )
+    screens, screenWidths = findLargestContours(screens)
 
-    if not len(four_edge_polygons) >= 2:
+    # Screen data validation
+    if not len(screens) >= 2:
         raise RuntimeError("No rectangle found")
 
-    if polygonWidths[0] != polygonWidths[1]:
-        raise RuntimeError(f"Rectangle mismatch: {polygonWidths}")
+    if screenWidths[0] != screenWidths[1]:
+        raise RuntimeError(f"Rectangle mismatch: {screenWidths}")
 
     if debug:
-        previewContours(image, [four_edge_polygons[0]])
+        previewContours(image, [screens[0]])
 
     # now that we have our screen contour, we need to determine
     # the top-left, top-right, bottom-right, and bottom-left
@@ -244,7 +244,7 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
     # by reshaping our contour to be our finals and initializing
     # our output rectangle in top-left, top-right, bottom-right,
     # and bottom-left order
-    pts = four_edge_polygons[0].reshape(4, 2)
+    pts = screens[0].reshape(4, 2)
     log.debug("Found bill rectagle at %s", pts)
     rect = order_points(pts)
     log.debug(rect)
