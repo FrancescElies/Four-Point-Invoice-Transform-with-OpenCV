@@ -17,6 +17,12 @@ def previewImage(window_name: str,
                  wait_miliseconds_before_destroy: int = 2000):
     log.debug(f"Showing {window_name}")
     cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
+    # Hack: setting WINDOW_FULLSCREEN and backt to WINDOW_NORMAL makes sure
+    # image is presented at the front over other windows.
+    cv2.setWindowProperty(window_name,
+                          prop_id=cv2.WND_PROP_FULLSCREEN,
+                          prop_value=cv2.WINDOW_FULLSCREEN)
+    cv2.waitKey(1)
     cv2.setWindowProperty(window_name,
                           prop_id=cv2.WND_PROP_FULLSCREEN,
                           prop_value=cv2.WINDOW_NORMAL)
