@@ -34,8 +34,8 @@ def previewContours(image, contours):
     previewImage("contours", image)
 
 
-# function to order points to proper rectangle
 def order_points(pts):
+    """ Orders points to a proper rectangle """
     # initialzie a list of coordinates that will be ordered
     # such that the first entry in the list is the top-left,
     # the second entry is the top-right, the third is the
@@ -59,8 +59,7 @@ def order_points(pts):
     return rect
 
 
-# function to transform image to four points
-def four_point_transform(image, pts):
+def transform_to_four_points(image, pts):
     # obtain a consistent order of the points and unpack them
     # individually
     rect = order_points(pts)
@@ -107,9 +106,11 @@ def four_point_transform(image, pts):
     return warped
 
 
-# function to find two largest contours which ones are may be
-#  full image and our rectangle edged object
 def findLargestContours(cntList, cntWidths):
+    """Finds two largest contours, they may be, our full image and our rectangle
+    edged object.
+
+    """
     newCntList = []
     newCntWidths = []
 
@@ -142,12 +143,7 @@ def findLargestContours(cntList, cntWidths):
 
 def save_image(src_file_path, image, suffix="-scanned", extension="jpg"):
     """Given the original image name, saves a new modified image with
-    desired suffix.
-
-    If original image is located at:
-    '/Users/myuser/myfolder/myimage.jpg'
-    Saves modiffied image at:
-    '/Users/myuser/myfolder/myimage-warped.jpg'
+    desired suffix next to it myimage.jpg myimage-warped.jpg.
 
     :param src_file_path: Original file path
     :param image: modified imagee
@@ -162,10 +158,8 @@ def save_image(src_file_path, image, suffix="-scanned", extension="jpg"):
     cv2.imwrite(new_file_path, image)
 
 
-# driver function which identifieng 4 corners and doing four point transformation
-def convert_object(
-    file_path, screen_size=None, new_file_suffix="-scanned"
-):
+def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
+    """ Identifies 4 corners and does four point transformation """
     debug = True if log.level == logging.DEBUG else False
     image = cv2.imread(str(file_path))
 
@@ -250,7 +244,7 @@ def convert_object(
 
     # apply the four point tranform to obtain a "birds eye view" of
     # the image
-    warped = four_point_transform(image, pts)
+    warped = transform_to_four_points(image, pts)
 
     # convert the warped image to grayscale and then adjust
     # the intensity of the pixels to have minimum and maximum
