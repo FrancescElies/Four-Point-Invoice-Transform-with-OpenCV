@@ -1,15 +1,37 @@
 import logging
-import os
 import re
+from collections import namedtuple
+from itertools import islice
+from operator import attrgetter
 
 import cv2
 import numpy as np
-from docopt import docopt
-from schema import And, Or, Schema, SchemaError
 
 logging.basicConfig()
 
 log = logging.getLogger(__name__)
+
+def previewImage(window_name: str,
+                 image: np.ndarray,
+                 wait_miliseconds_before_destroy: int = 2000):
+    import ipdb; ipdb.set_trace(context=8)  # XXX (cesc)
+
+    log.debug(f"Showing {window_name}")
+    cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
+    cv2.setWindowProperty(window_name,
+                            prop_id=cv2.WND_PROP_FULLSCREEN,
+                            prop_value=cv2.WINDOW_NORMAL)
+
+    cv2.imshow(window_name,image)
+    cv2.waitKey(wait_miliseconds_before_destroy)
+    cv2.destroyAllWindows()
+
+
+def previewContours(image, contours):
+    green = (0, 255, 0)
+    image = cv2.drawContours(image, contours,
+                             contourIdx=-1, color=green, thickness=10)
+    previewImage("contours", image)
 
 
 # function to order points to proper rectangle
@@ -85,9 +107,9 @@ def four_point_transform(image, pts):
     return warped
 
 
-# function to find two largest countours which ones are may be
+# function to find two largest contours which ones are may be
 #  full image and our rectangle edged object
-def findLargestCountours(cntList, cntWidths):
+def findLargestContours(cntList, cntWidths):
     newCntList = []
     newCntWidths = []
 
@@ -113,8 +135,8 @@ def findLargestCountours(cntList, cntWidths):
     cntList.pop(seccond_largest_cnt_pos)
     cntWidths.pop(seccond_largest_cnt_pos)
 
-    log.debug("Old Screen Dimentions filtered %s", cntWidths)
-    log.debug("Screen Dimentions filtered %s", newCntWidths)
+    log.debug("findLargestContours: Old Screen Dimentions filtered %s", cntWidths)
+    log.debug("findLargestContours: Screen Dimentions filtered %s", newCntWidths)
     return newCntList, newCntWidths
 
 
@@ -144,8 +166,8 @@ def save_image(src_file_path, image, suffix="-scanned", extension="jpg"):
 def convert_object(
     file_path, screen_size=None, new_file_suffix="-scanned"
 ):
-    is_debug = True if log.level == 10 else False
-    image = cv2.imread(file_path)
+    debug = True if log.level == logging.DEBUG else False
+    image = cv2.imread(str(file_path))
 
     # image = imutils.resize(image, height=300)
     # ratio = image.shape[0] / 300.0
@@ -160,64 +182,60 @@ def convert_object(
     gray = cv2.medianBlur(gray, 5)
     edged = cv2.Canny(gray, 30, 400)
 
-    if is_debug:
-        cv2.imshow("edged", edged)
+    if debug:
+        previewImage("Edged Image", edged)
 
     # find contours in the edged image, keep only the largest
     # ones, and initialize our screen contour
 
-    countours, hierarcy = cv2.findContours(
+    contours, hierarcy = cv2.findContours(
         edged, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE
     )
 
-    log.debug("length of countours %s", len(countours))
+    log.debug("Contours found: %s", len(contours))
 
     imageCopy = image.copy()
-    if is_debug:
-        cv2.imshow(
-            "drawn countours",
-            cv2.drawContours(imageCopy, countours, -1, (0, 255, 0), 1),
-        )
 
     # approximate the contour
-    cnts = sorted(countours, key=cv2.contourArea, reverse=True)
-    screenCntList = []
-    scrWidths = []
-    for cnt in cnts:
-        peri = cv2.arcLength(cnt, True)  # cnts[1] always rectangle O.o
-        approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
-        screenCnt = approx
-        # log.debug(len(approx))
+    ContourArea = namedtuple('ContourArea', ['curve', 'area'])
+    contourAreas = [ContourArea(curve=x, area=cv2.contourArea(x))
+                    for x in contours]
+    contourAreas = sorted(contourAreas, key=attrgetter('area'))
 
-        if len(screenCnt) == 4:
+    if debug:
+        previewContours(imageCopy, [x.curve for x in contourAreas])
 
-            (X, Y, W, H) = cv2.boundingRect(cnt)
-            # log.debug('X Y W H', (X, Y, W, H))
-            screenCntList.append(screenCnt)
-            scrWidths.append(W)
+    four_edge_polygons = []
+    polygonWidths = []
+    for contour in contourAreas:
+        peri = cv2.arcLength(contour.curve, True)
+        approxPolygon = cv2.approxPolyDP(contour.curve,
+                                         epsilon=0.02 * peri,  # approximation accuracy
+                                         closed=True)
 
-        # else:
-        #     log.debug("4 points not found")
+        if len(approxPolygon) == 4:
+            (X, Y, W, H) = cv2.boundingRect(contour.curve)
+            log.debug(f'X={X} Y={Y} W={W} H={H}')
+            four_edge_polygons.append(approxPolygon)
+            polygonWidths.append(W)
 
-    log.debug("Screens found : %s", len(screenCntList))
-    log.debug("Screen Dimentions %s", scrWidths)
+    log.debug("Screens found : %s", len(four_edge_polygons))
+    previewContours(imageCopy, four_edge_polygons)
+    log.debug("Screen Dimentions %s", polygonWidths)
+    import ipdb; ipdb.set_trace(context=8)  # XXX (cesc)
 
-    screenCntList, scrWidths = findLargestCountours(
-        screenCntList, scrWidths
+    four_edge_polygons, polygonWidths = findLargestContours(
+        four_edge_polygons, polygonWidths
     )
 
-    if not len(screenCntList) >= 2:  # there is no rectangle found
-        return None
-    elif scrWidths[0] != scrWidths[1]:  # mismatch in rect
-        return None
+    if not len(four_edge_polygons) >= 2:
+        raise RuntimeError("No rectangle found")
 
-    if is_debug:
-        cv2.imshow(
-            " Screen",
-            cv2.drawContours(
-                image.copy(), [screenCntList[0]], -1, (0, 255, 0), 3
-            ),
-        )
+    if polygonWidths[0] != polygonWidths[1]:
+        raise RuntimeError(f"Rectangle mismatch: {polygonWidths}")
+
+    if debug:
+        previewContours(image, [four_edge_polygons[0]])
 
     # now that we have our screen contour, we need to determine
     # the top-left, top-right, bottom-right, and bottom-left
@@ -225,7 +243,7 @@ def convert_object(
     # by reshaping our contour to be our finals and initializing
     # our output rectangle in top-left, top-right, bottom-right,
     # and bottom-left order
-    pts = screenCntList[0].reshape(4, 2)
+    pts = four_edge_polygons[0].reshape(4, 2)
     log.debug("Found bill rectagle at %s", pts)
     rect = order_points(pts)
     log.debug(rect)
@@ -244,10 +262,9 @@ def convert_object(
     warp = clahe.apply(warp)
 
     # show the original and warped images
-    if is_debug:
-        cv2.imshow("Original", image)
-        cv2.imshow("warp", warp)
-        cv2.waitKey(0)
+    if debug:
+        previewImage("Original", image)
+        previewImage("warp", warp)
 
     save_image(file_path, warp, suffix=new_file_suffix)
 
@@ -257,5 +274,3 @@ def convert_object(
         )
     else:
         return cv2.cvtColor(warp, cv2.COLOR_GRAY2RGB)
-
-
