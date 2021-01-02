@@ -32,10 +32,10 @@ def previewImage(window_name: str,
     cv2.destroyAllWindows()
 
 
-def previewContours(image, contours):
+def previewContours(image, contours, thickness=5):
     green = (0, 255, 0)
     image = cv2.drawContours(image, contours,
-                             contourIdx=-1, color=green, thickness=10)
+                             contourIdx=-1, color=green, thickness=thickness)
     previewImage("contours", image)
 
 
