@@ -167,7 +167,7 @@ def convert_object(file_path, screen_size=None, new_file_suffix="scanned"):
     previewContours(image, [x.fourpoints for x in screens])
 
     # find largest screen
-    largest_screen = screens[screens.index(max(screens, key=attrgetter('width')))]
+    largest_screen = max(screens, key=attrgetter('width'))
 
     if debug:
         previewContours(image, [largest_screen.fourpoints])
