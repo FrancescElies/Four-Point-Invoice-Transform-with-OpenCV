@@ -13,7 +13,7 @@ setup(
     install_requires=[
         "opencv-python-headless",
         "numpy",
-        "docopt",
+        "typer[all]",
         "schema",
         "setuptools",
         # "imutils",
