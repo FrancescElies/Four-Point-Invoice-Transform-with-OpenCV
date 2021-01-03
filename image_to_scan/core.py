@@ -35,9 +35,11 @@ def previewImage(window_name: str,
 
 def previewContours(image, contours, thickness=5):
     green = (0, 255, 0)
-    image = cv2.drawContours(image, contours,
-                             contourIdx=-1, color=green, thickness=thickness)
-    previewImage("contours", image)
+    _image = image.copy()
+
+    _image = cv2.drawContours(_image, contours,
+                              contourIdx=-1, color=green, thickness=thickness)
+    previewImage("contours", _image)
 
 
 def order_points(pts):
@@ -138,7 +140,6 @@ def convert_object(file_path, screen_size=None, new_file_suffix="scanned"):
 
     log.debug("Contours found: %s", len(contours))
 
-    imageCopy = image.copy()
 
     # approximate the contour
     ContourArea = namedtuple('ContourArea', ['curve', 'area'])
@@ -147,7 +148,7 @@ def convert_object(file_path, screen_size=None, new_file_suffix="scanned"):
     contourAreas = sorted(contourAreas, key=attrgetter('area'))
 
     if debug:
-        previewContours(imageCopy, [x.curve for x in contourAreas])
+        previewContours(image, [x.curve for x in contourAreas])
 
     screens = []  # 4 point polygons, repressenting possible screens (rectangles)
     for contour in contourAreas:
