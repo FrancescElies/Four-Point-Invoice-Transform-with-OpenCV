@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from pathlib import Path
 
 import image_to_scan
 
@@ -14,10 +15,9 @@ class TestSamples:
         os.remove(self.output_file)
 
     def test_sample_02(self):
-        input_file = "tests/samples/02/original.jpg"
-        input_file_no_ext = input_file.split(".")[0]
+        input_file = Path("tests/samples/02/original.jpg")
         suffix = "warped"
         extension = "jpg"
-        self.output_file = f"{input_file_no_ext}-{suffix}.{extension}"
-        image_to_scan.convert_object(input_file, new_file_suffix=f"-{suffix}")
-        assert os.path.exists(self.output_file)
+        self.output_file = input_file.parent / f"{input_file.stem}-{suffix}.{extension}"
+        image_to_scan.convert_object(input_file, new_file_suffix=f"{suffix}")
+        assert self.output_file.exists()
