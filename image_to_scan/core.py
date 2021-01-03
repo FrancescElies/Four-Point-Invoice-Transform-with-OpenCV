@@ -72,9 +72,6 @@ def transform_to_four_points(image, pts):
     # individually
     rect = order_points(pts)
 
-    # # multiply the rectangle by the original ratio
-    # rect *= ratio
-
     (tl, tr, br, bl) = rect
 
     # compute the width of the new image, which will be the
@@ -118,9 +115,6 @@ def convert_object(file_path, screen_size=None, new_file_suffix="scanned"):
     """ Identifies 4 corners and does four point transformation """
     debug = True if log.level == logging.DEBUG else False
     image = cv2.imread(str(file_path))
-
-    # image = imutils.resize(image, height=300)
-    # ratio = image.shape[0] / 300.0
 
     # convert the image to grayscale, blur it, and find edges
     # in the image
