@@ -204,7 +204,9 @@ def convert_object(file_path, screen_size=None, new_file_suffix="scanned"):
         previewImage("Original", image)
         previewImage("warp", warp)
 
-    save_image(file_path, warp, suffix=new_file_suffix)
+    warp_file = str(file_path.parent / f"{file_path.stem}-{new_file_suffix}.jpg")
+    cv2.imwrite(warp_file, warp)
+    log.debug(f"Result: {warp_file}")
 
     if screen_size:
         return cv2.cvtColor(
