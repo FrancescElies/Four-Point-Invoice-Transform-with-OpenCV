@@ -11,10 +11,9 @@ setup(
     name=package,
     version="0.0.6",
     install_requires=[
-        "opencv-python-headless",
-        "numpy",
-        "typer[all]",
-        "schema",
+        "opencv-python-headless>=4,<5",
+        "numpy>=1,<2",
+        "typer[all]>=0,<1",
         "setuptools",
         # "imutils",
         # "scikit-image",
