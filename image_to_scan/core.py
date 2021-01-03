@@ -1,7 +1,5 @@
 import logging
-import re
 from collections import namedtuple
-from itertools import islice
 from operator import attrgetter
 
 import cv2
@@ -10,6 +8,9 @@ import numpy as np
 logging.basicConfig()
 
 log = logging.getLogger(__name__)
+
+
+Screen = namedtuple('Screen', ['fourpoints', 'width'])
 
 
 def previewImage(window_name: str,
@@ -113,62 +114,7 @@ def transform_to_four_points(image, pts):
     return warped
 
 
-def findLargestContours(screens):
-    """Finds two largest contours, they may be, our full image and our rectangle
-    edged object.
-
-    """
-    contours = [x.fourpoints for x in screens]
-    contour_widths = [x.width for x in screens]
-
-    newCntList = []
-    newCntWidths = []
-
-    # finding 1st largest rectangle
-    first_largest_cnt_pos = contour_widths.index(max(contour_widths))
-
-    # adding it in new
-    newCntList.append(contours[first_largest_cnt_pos])
-    newCntWidths.append(contour_widths[first_largest_cnt_pos])
-
-    # removing it from old
-    contours.pop(first_largest_cnt_pos)
-    contour_widths.pop(first_largest_cnt_pos)
-
-    # finding second largest rectangle
-    seccond_largest_cnt_pos = contour_widths.index(max(contour_widths))
-
-    # adding it in new
-    newCntList.append(contours[seccond_largest_cnt_pos])
-    newCntWidths.append(contour_widths[seccond_largest_cnt_pos])
-
-    # removing it from old
-    contours.pop(seccond_largest_cnt_pos)
-    contour_widths.pop(seccond_largest_cnt_pos)
-
-    log.debug("Old Screen Dimentions filtered %s", contour_widths)
-    log.debug("Screen Dimentions filtered %s", newCntWidths)
-    return newCntList, newCntWidths
-
-
-def save_image(src_file_path, image, suffix="-scanned", extension="jpg"):
-    """Given the original image name, saves a new modified image with
-    desired suffix next to it myimage.jpg myimage-warped.jpg.
-
-    :param src_file_path: Original file path
-    :param image: modified imagee
-    :param suffix: string to be added to the new image name
-    """
-
-    new_file_path = re.sub(
-        r"\.(?P<extension>.*)$",
-        fr"{suffix}.{extension}",
-        src_file_path,
-    )
-    cv2.imwrite(new_file_path, image)
-
-
-def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
+def convert_object(file_path, screen_size=None, new_file_suffix="scanned"):
     """ Identifies 4 corners and does four point transformation """
     debug = True if log.level == logging.DEBUG else False
     image = cv2.imread(str(file_path))
@@ -209,7 +155,6 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
     if debug:
         previewContours(imageCopy, [x.curve for x in contourAreas])
 
-    Screen = namedtuple('Screen', ['fourpoints', 'width'])
     screens = []  # 4 point polygons, repressenting possible screens (rectangles)
     for contour in contourAreas:
         peri = cv2.arcLength(contour.curve, True)
@@ -224,19 +169,13 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
             screens.append(Screen(fourpoints=polygon_less_vertices, width=width))
 
     log.debug(f"Screens found {len(screens)}: {screens}")
-    previewContours(imageCopy, [x.fourpoints for x in screens])
+    previewContours(image, [x.fourpoints for x in screens])
 
-    screens, screenWidths = findLargestContours(screens)
-
-    # Screen data validation
-    if not len(screens) >= 2:
-        raise RuntimeError("No rectangle found")
-
-    if screenWidths[0] != screenWidths[1]:
-        raise RuntimeError(f"Rectangle mismatch: {screenWidths}")
+    # find largest screen
+    largest_screen = screens[screens.index(max(screens, key=attrgetter('width')))]
 
     if debug:
-        previewContours(image, [screens[0]])
+        previewContours(image, [largest_screen.fourpoints])
 
     # now that we have our screen contour, we need to determine
     # the top-left, top-right, bottom-right, and bottom-left
@@ -244,7 +183,7 @@ def convert_object(file_path, screen_size=None, new_file_suffix="-scanned"):
     # by reshaping our contour to be our finals and initializing
     # our output rectangle in top-left, top-right, bottom-right,
     # and bottom-left order
-    pts = screens[0].reshape(4, 2)
+    pts = largest_screen.fourpoints.reshape(4, 2)
     log.debug("Found bill rectagle at %s", pts)
     rect = order_points(pts)
     log.debug(rect)
