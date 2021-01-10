@@ -18,9 +18,10 @@ stages:
 
     - task: TwineAuthenticate@1
       displayName: 'Authenticate with Pypi'
-      condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
+      # condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
       inputs:
-        pythonUploadServiceConnection: ImageToScanConnectionPyPI
+        # pythonUploadServiceConnection: ImageToScanConnectionPyPI
+        pythonUploadServiceConnection: pypitest
 
     - script: python -m pip install --upgrade --quiet setuptools wheel twine
       displayName: install dependencies
@@ -35,7 +36,7 @@ stages:
     - script: python -m twine check "dist/*"
       displayName: check package
 
-    - script: python -m twine upload -r ImageToScanConnectionPyPI --config-file $(PYPIRC_PATH) --skip-existing "dist/*"
+    - script: python -m twine upload -r pypitest --config-file $(PYPIRC_PATH) --skip-existing "dist/*"
       condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
       displayName: upload to pypi
 
