@@ -21,6 +21,22 @@ stages:
     pool:
       vmImage: $(imageName)
     steps:
+    # PyPi
+    - task: TwineAuthenticate@1
+      condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
+      inputs:
+        pythonUploadServiceConnection: PyPIConnection
+
+    - script: python -m pip install --upgrade --quiet setuptools wheel twine
+
+    - script: python setup.py sdist bdist_wheel
+
+    - script: python -m twine check "dist/*whl" "dist/*tar.gz"
+
+    - script: python -m twine upload -r PyPIConnection --config-file $(PYPIRC_PATH) "dist/*whl" "dist/*tar.gz"
+      condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
+
+    # Standalone app
     - template: python-steps.yml
       parameters:
         toxEnv: $(tox.env) -- -o dist/image-to-scan
