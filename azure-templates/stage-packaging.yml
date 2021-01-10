@@ -58,7 +58,7 @@ stages:
     - script: python setup.py bdist_wheel
       displayName: create wheel
 
-    - publish: dist/*
+    - publish: dist
       artifact: image-to-scan-wheel-$(imageName)
       displayName: publish artifact
 
