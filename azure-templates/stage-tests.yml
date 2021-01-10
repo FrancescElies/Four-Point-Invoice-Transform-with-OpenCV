@@ -6,43 +6,43 @@ stages:
     strategy:
       matrix:
         # python 3.7
-        linuxTestPY37:
+        linuxPY37:
           imageName: 'ubuntu-latest'
           python.version: '3.7'
           tox.env: py37
-        macTestPY37:
+        macPY37:
           imageName: 'macOS-latest'
           python.version: '3.7'
           tox.env: py37
-        windowsTestPY37:
+        windowsPY37:
           imageName: 'windows-latest'
           python.version: '3.7'
           tox.env: py37
 
         # python 3.8
-        linuxTestPY38:
+        linuxPY38:
           imageName: 'ubuntu-latest'
           python.version: '3.8'
           tox.env: py38
-        macTestPY38:
+        macPY38:
           imageName: 'macOS-latest'
           python.version: '3.8'
           tox.env: py38
-        windowsTestPY38:
+        windowsPY38:
           imageName: 'windows-latest'
           python.version: '3.8'
           tox.env: py38
 
         # python 3.9
-        linuxTestPY39:
+        linuxPY39:
           imageName: 'ubuntu-latest'
           python.version: '3.9'
           tox.env: py39
-        macTestPY39:
+        macPY39:
           imageName: 'macOS-latest'
           python.version: '3.9'
           tox.env: py39
-        windowsTestPY39:
+        windowsPY39:
           imageName: 'windows-latest'
           python.version: '3.9'
           tox.env: py39
