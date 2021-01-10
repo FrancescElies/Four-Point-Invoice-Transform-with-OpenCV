@@ -53,13 +53,17 @@ stages:
         pythonUploadServiceConnection: ImageToScanConnectionPyPI
 
     - script: python -m pip install --upgrade --quiet setuptools wheel twine
+      displayName: install dependencies
 
     - script: python setup.py bdist_wheel
+      displayName: create wheel
 
     - script: python -m twine check "dist/*"
+      displayName: check package
 
     - script: python -m twine upload -r PyPIConnection --config-file $(PYPIRC_PATH) --skip-existing "dist/*"
       condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
+      displayName: upload to pypi
 
   - job: pyinstaller
     strategy:
@@ -89,9 +93,10 @@ stages:
                   eq(variables['Build.SourceBranch'], 'refs/heads/master')
                  )
       artifact: image-to-scan-$(imageName)
+      displayName: publish artifact
 
     - task: GithubRelease@0
-      displayName: 'Create GitHub Release'
+      displayName: Create GitHub Release
       condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
       inputs:
         gitHubConnection: image-to-scan
