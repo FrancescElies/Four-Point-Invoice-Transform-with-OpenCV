@@ -55,6 +55,6 @@ stages:
     pool:
       vmImage: $(imageName)
     steps:
-    - template: python-steps.yaml
+    - template: python-steps.yml
       parameters:
         toxEnv: $(tox.env)

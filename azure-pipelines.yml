@@ -3,7 +3,7 @@
 # Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
-# see https://github.com/microsoft/azure-pipelines-yaml
+# see https://github.com/microsoft/azure-pipelines-yml
 stages:
-- template: azure-templates/stage-tests.yaml
-- template: azure-templates/stage-packaging.yaml
+- template: azure-templates/stage-tests.yml
+- template: azure-templates/stage-packaging.yml
