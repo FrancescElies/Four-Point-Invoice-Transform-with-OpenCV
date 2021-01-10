@@ -25,29 +25,29 @@ stages:
           tox.env: py37
 
         # python 3.8
-        linuxTestPY37:
+        linuxTestPY38:
           imageName: 'ubuntu-latest'
           python.version: '3.8'
           tox.env: py38
-        macTestPY37:
+        macTestPY38:
           imageName: 'macOS-latest'
           python.version: '3.8'
           tox.env: py38
-        windowsTestPY37:
+        windowsTestPY38:
           imageName: 'windows-latest'
           python.version: '3.8'
           tox.env: py38
 
         # python 3.9
-        linuxTestPY37:
+        linuxTestPY39:
           imageName: 'ubuntu-latest'
           python.version: '3.9'
           tox.env: py39
-        macTestPY37:
+        macTestPY39:
           imageName: 'macOS-latest'
           python.version: '3.9'
           tox.env: py39
-        windowsTestPY37:
+        windowsTestPY39:
           imageName: 'windows-latest'
           python.version: '3.9'
           tox.env: py39
