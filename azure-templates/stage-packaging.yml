@@ -58,6 +58,10 @@ stages:
     - script: python setup.py bdist_wheel
       displayName: create wheel
 
+    - publish: $(System.DefaultWorkingDirectory)/dist/*
+      artifact: image-to-scan-wheel-$(imageName)
+      displayName: publish artifact
+
     - script: python -m twine check "dist/*"
       displayName: check package
 
@@ -88,11 +92,11 @@ stages:
         toxEnv: $(tox.env) -- -o dist/image-to-scan
 
     - publish: $(System.DefaultWorkingDirectory)/dist/image-to-scan
-      condition: and(
-                  succeeded(),
-                  eq(variables['Build.SourceBranch'], 'refs/heads/master')
-                 )
-      artifact: image-to-scan-$(imageName)
+      # condition: and(
+      #             succeeded(),
+      #             eq(variables['Build.SourceBranch'], 'refs/heads/master')
+      #            )
+      artifact: image-to-scan-standalone-$(imageName)
       displayName: publish artifact
 
     - task: GithubRelease@0
