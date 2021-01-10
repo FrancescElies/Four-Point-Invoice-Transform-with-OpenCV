@@ -1,7 +1,7 @@
 stages:
 - stage: Packages
   jobs:
-  - job: wheel
+  - job: wheel_and_sdist
     strategy:
       matrix:
         PY3:
