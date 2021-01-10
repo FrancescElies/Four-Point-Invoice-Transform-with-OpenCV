@@ -54,10 +54,11 @@ stages:
       vmImage: $(imageName)
     steps:
 
-    -script: |
-      python -m pip install -r requirements/main.txt
-      python -m PyInstaller --name image-to-scan image_to_scan/app.py
-    displayName: pyinstaller
+    - script: python -m pip install -r requirements/main.txt
+      displayName: install requirements
+
+    - script: python -m PyInstaller --name image-to-scan image_to_scan/app.py
+      displayName: pyinstaller
 
     - publish: $(System.DefaultWorkingDirectory)/dist/image-to-scan
       # condition: and(
