@@ -1,0 +1,40 @@
+
+stages:
+- stage: Packages
+  jobs:
+  - job: Packaging
+    strategy:
+      matrix:
+        # packaging
+        linuxPackaging:
+          imageName: 'ubuntu-latest'
+          python.version: '3.9'
+          tox.env: packaging
+        macPackaging:
+          imageName: 'macOS-latest'
+          python.version: '3.9'
+          tox.env: packaging
+        windowsPackaging:
+          imageName: 'windows-latest'
+          python.version: '3.9'
+          tox.env: packaging
+    pool:
+      vmImage: $(imageName)
+    steps:
+    - template: python-steps.yaml
+      parameters:
+        toxEnv: $(tox.env) -- -o dist/$(imageName)/image-to-scan
+
+    - publish: $(System.DefaultWorkingDirectory)/dist/$(imageName)/image-to-scan
+      condition: and(
+                  succeeded(),
+                  eq(variables['Build.SourceBranch'], 'refs/heads/master')
+                 )
+      artifact: image-to-scan-$(imageName)
+
+    - task: GithubRelease@0
+      displayName: 'Create GitHub Release'
+      condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
+      inputs:
+        gitHubConnection: image-to-scan
+        assets: $(System.DefaultWorkingDirectory)/dist/$(imageName)/image-to-scan
