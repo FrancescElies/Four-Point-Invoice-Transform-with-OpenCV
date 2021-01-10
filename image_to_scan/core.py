@@ -163,8 +163,9 @@ def convert_object(file_path, screen_size=None, new_file_suffix="scanned"):
             log.debug(f'x={x} y={y} width={width} height={height}')
             screens.append(Screen(fourpoints=polygon_less_vertices, width=width))
 
-    log.debug(f"Screens found {len(screens)}: {screens}")
-    previewContours(image, [x.fourpoints for x in screens])
+    if debug:
+        log.debug(f"Screens found {len(screens)}: {screens}")
+        previewContours(image, [x.fourpoints for x in screens])
 
     # find largest screen
     largest_screen = max(screens, key=attrgetter('width'))
