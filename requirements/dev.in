@@ -1,6 +1,8 @@
 twine
 flake8
 wheel
+setuptools
+pip
 pytest
 pip-tools
 tox

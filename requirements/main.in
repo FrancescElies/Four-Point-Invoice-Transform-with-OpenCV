@@ -1,3 +1,5 @@
 typer[all]
 numpy
 opencv-python-headless
+PyInstaller
+setuptools

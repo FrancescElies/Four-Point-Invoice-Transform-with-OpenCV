@@ -16,8 +16,9 @@ clean-build:
 
 update-deps:
   pip install --upgrade pip-tools
-  pip-compile --upgrade --build-isolation --generate-hashes --output-file requirements/main.txt requirements/main.in
-  pip-compile --upgrade --build-isolation --generate-hashes --output-file requirements/dev.txt requirements/dev.in
+  # --generate-hashes
+  pip-compile --upgrade --build-isolation --output-file requirements/main.txt requirements/main.in
+  pip-compile --upgrade --build-isolation --output-file requirements/dev.txt requirements/dev.in
 
 build: clean-build
 	python -m pip install --upgrade --quiet setuptools wheel twine
