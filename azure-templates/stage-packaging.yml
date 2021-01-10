@@ -35,7 +35,7 @@ stages:
     - script: python -m twine check "dist/*"
       displayName: check package
 
-    - script: python -m twine upload -r PyPIConnection --config-file $(PYPIRC_PATH) --skip-existing "dist/*"
+    - script: python -m twine upload -r ImageToScanConnectionPyPI --config-file $(PYPIRC_PATH) --skip-existing "dist/*"
       condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
       displayName: upload to pypi
 
