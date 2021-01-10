@@ -1,11 +1,69 @@
-
 stages:
 - stage: Packages
   jobs:
-  - job: Packaging
+  - job: Packaging pypi
     strategy:
       matrix:
-        # packaging
+        linuxPackagingPY37:
+          imageName: 'ubuntu-latest'
+          python.version: '3.7'
+          tox.env: packaging
+        linuxPackagingPY38:
+          imageName: 'ubuntu-latest'
+          python.version: '3.8'
+          tox.env: packaging
+        linuxPackagingPY39:
+          imageName: 'ubuntu-latest'
+          python.version: '3.9'
+          tox.env: packaging
+
+        macPackagingPY37:
+          imageName: 'macOs-latest'
+          python.version: '3.7'
+          tox.env: packaging
+        macPackagingPY38:
+          imageName: 'macOs-latest'
+          python.version: '3.8'
+          tox.env: packaging
+        macPackagingPY39:
+          imageName: 'macOs-latest'
+          python.version: '3.9'
+          tox.env: packaging
+
+        windowsPackagingPY37:
+          imageName: 'windows-latest'
+          python.version: '3.7'
+          tox.env: packaging
+        windowsPackagingPY38:
+          imageName: 'windows-latest'
+          python.version: '3.8'
+          tox.env: packaging
+        windowsPackagingPY39:
+          imageName: 'windows-latest'
+          python.version: '3.9'
+          tox.env: packaging
+
+    pool:
+      vmImage: $(imageName)
+    steps:
+    - task: TwineAuthenticate@1
+      displayName: 'Authenticate with Pypi'
+      condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
+      inputs:
+        pythonUploadServiceConnection: ImageToScanConnectionPyPI
+
+    - script: python -m pip install --upgrade --quiet setuptools wheel twine
+
+    - script: python setup.py bdist_wheel
+
+    - script: python -m twine check "dist/*"
+
+    - script: python -m twine upload -r PyPIConnection --config-file $(PYPIRC_PATH) --skip-existing "dist/*"
+      condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
+
+  - job: Packaging Pyinstaller
+    strategy:
+      matrix:
         linuxPackaging:
           imageName: 'ubuntu-latest'
           python.version: '3.9'
@@ -21,22 +79,6 @@ stages:
     pool:
       vmImage: $(imageName)
     steps:
-    # PyPi
-    - task: TwineAuthenticate@1
-      condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
-      inputs:
-        pythonUploadServiceConnection: PyPIConnection
-
-    - script: python -m pip install --upgrade --quiet setuptools wheel twine
-
-    - script: python setup.py sdist bdist_wheel
-
-    - script: python -m twine check "dist/*whl" "dist/*tar.gz"
-
-    - script: python -m twine upload -r PyPIConnection --config-file $(PYPIRC_PATH) "dist/*whl" "dist/*tar.gz"
-      condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
-
-    # Standalone app
     - template: python-steps.yml
       parameters:
         toxEnv: $(tox.env) -- -o dist/image-to-scan
