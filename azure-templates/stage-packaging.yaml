@@ -23,9 +23,9 @@ stages:
     steps:
     - template: python-steps.yaml
       parameters:
-        toxEnv: $(tox.env) -- -o dist/$(imageName)/image-to-scan
+        toxEnv: $(tox.env) -- -o dist/image-to-scan
 
-    - publish: $(System.DefaultWorkingDirectory)/dist/$(imageName)/image-to-scan
+    - publish: $(System.DefaultWorkingDirectory)/dist/image-to-scan
       condition: and(
                   succeeded(),
                   eq(variables['Build.SourceBranch'], 'refs/heads/master')
@@ -37,4 +37,4 @@ stages:
       condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
       inputs:
         gitHubConnection: image-to-scan
-        assets: $(System.DefaultWorkingDirectory)/dist/$(imageName)/image-to-scan
+        assets: $(System.DefaultWorkingDirectory)/dist/image-to-scan
