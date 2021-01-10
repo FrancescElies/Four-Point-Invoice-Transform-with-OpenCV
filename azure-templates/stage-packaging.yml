@@ -39,7 +39,7 @@ stages:
         # https://github.com/microsoft/azure-pipelines-tasks/issues/11719
         sed -i 's/username=build/username=__token__/g' $(PYPIRC_PATH)
         python -m twine upload -r ImageToScanConnectionPyPI --config-file $(PYPIRC_PATH) --skip-existing "dist/*"
-      condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
+      # condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
       displayName: upload to pypi
 
   - job: pyinstaller
