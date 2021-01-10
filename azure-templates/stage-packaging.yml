@@ -1,7 +1,7 @@
 stages:
 - stage: Packages
   jobs:
-  - job: packaging_pypi
+  - job: wheel
     strategy:
       matrix:
         linuxPackagingPY37:
@@ -61,7 +61,7 @@ stages:
     - script: python -m twine upload -r PyPIConnection --config-file $(PYPIRC_PATH) --skip-existing "dist/*"
       condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')
 
-  - job: packaging_pyinstaller
+  - job: pyinstaller
     strategy:
       matrix:
         linuxPackaging:
