@@ -55,7 +55,7 @@ stages:
     steps:
     - template: python-steps.yml
       parameters:
-        toxEnv: $(tox.env) -- -o dist/image-to-scan
+        toxEnv: $(tox.env) -- -o dist
 
     - publish: $(System.DefaultWorkingDirectory)/dist/image-to-scan
       # condition: and(

@@ -23,7 +23,7 @@ update-deps:
 build: clean-build
 	python -m pip install --upgrade --quiet setuptools wheel twine
 	python setup.py sdist bdist_wheel
-	tox -e packaging -- -o dist/pex-$(uname)/image-to-scan
+	tox -e py39-packaging -- -o dist/
 
 publish-pypi: build
 	python -m twine check dist/*
