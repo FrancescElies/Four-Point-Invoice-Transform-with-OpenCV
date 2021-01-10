@@ -4,44 +4,10 @@ stages:
   - job: wheel
     strategy:
       matrix:
-        linuxPackagingPY37:
-          imageName: 'ubuntu-latest'
-          python.version: '3.7'
-          tox.env: packaging
-        linuxPackagingPY38:
-          imageName: 'ubuntu-latest'
-          python.version: '3.8'
-          tox.env: packaging
-        linuxPackagingPY39:
+        PY3:
           imageName: 'ubuntu-latest'
           python.version: '3.9'
-          tox.env: packaging
-
-        macPackagingPY37:
-          imageName: 'macOs-latest'
-          python.version: '3.7'
-          tox.env: packaging
-        macPackagingPY38:
-          imageName: 'macOs-latest'
-          python.version: '3.8'
-          tox.env: packaging
-        macPackagingPY39:
-          imageName: 'macOs-latest'
-          python.version: '3.9'
-          tox.env: packaging
-
-        windowsPackagingPY37:
-          imageName: 'windows-latest'
-          python.version: '3.7'
-          tox.env: packaging
-        windowsPackagingPY38:
-          imageName: 'windows-latest'
-          python.version: '3.8'
-          tox.env: packaging
-        windowsPackagingPY39:
-          imageName: 'windows-latest'
-          python.version: '3.9'
-          tox.env: packaging
+          tox.env: py39-packaging
 
     pool:
       vmImage: $(imageName)
@@ -55,7 +21,7 @@ stages:
     - script: python -m pip install --upgrade --quiet setuptools wheel twine
       displayName: install dependencies
 
-    - script: python setup.py bdist_wheel
+    - script: python setup.py sdist bdist_wheel
       displayName: create wheel
 
     - publish: dist
@@ -75,15 +41,15 @@ stages:
         linuxPackaging:
           imageName: 'ubuntu-latest'
           python.version: '3.9'
-          tox.env: packaging
+          tox.env: py39-packaging
         macPackaging:
           imageName: 'macOS-latest'
           python.version: '3.9'
-          tox.env: packaging
+          tox.env: py39-packaging
         windowsPackaging:
           imageName: 'windows-latest'
           python.version: '3.9'
-          tox.env: packaging
+          tox.env: py39-packaging
     pool:
       vmImage: $(imageName)
     steps:
