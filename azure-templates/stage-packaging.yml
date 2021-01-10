@@ -59,7 +59,7 @@ stages:
       displayName: create wheel
 
     - publish: dist
-      artifact: image-to-scan-wheel-$(imageName)
+      artifact: image-to-scan-wheel-$(imageName)-py$(python.version)
       displayName: publish artifact
 
     - script: python -m twine check "dist/*"
@@ -96,7 +96,7 @@ stages:
       #             succeeded(),
       #             eq(variables['Build.SourceBranch'], 'refs/heads/master')
       #            )
-      artifact: image-to-scan-standalone-$(imageName)
+      artifact: image-to-scan-standalone-$(imageName)-py$(python.version)
       displayName: publish artifact
 
     - task: GithubRelease@0
