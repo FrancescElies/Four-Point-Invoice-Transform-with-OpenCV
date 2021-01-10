@@ -53,9 +53,11 @@ stages:
     pool:
       vmImage: $(imageName)
     steps:
-    - template: python-steps.yml
-      parameters:
-        toxEnv: $(tox.env) -- -o dist
+
+    -script: |
+      python -m pip install -r requirements/main.txt
+      python -m PyInstaller --name image-to-scan image_to_scan/app.py
+    displayName: pyinstaller
 
     - publish: $(System.DefaultWorkingDirectory)/dist/image-to-scan
       # condition: and(
