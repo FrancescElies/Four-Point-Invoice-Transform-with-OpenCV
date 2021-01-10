@@ -33,8 +33,5 @@ publish-testpypi: build
 	python -m twine check dist/*
 	python -m twine upload --repository testpypi dist/*
 
-test: lint
-	tox -e venv
-
 lint:
 	flake8 image_to_scan
