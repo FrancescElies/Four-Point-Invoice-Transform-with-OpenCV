@@ -1,8 +1,9 @@
 # image-to-scan
 
-If you have an image of a document maybe you would like to crop
+If you have an image of a document and you would like to crop
 everything outside the document and correct the angle from which the
-photo was taken, in that case this command line tool might help.
+photo was taken, in that case this command line tool might be for you.
+
 
 <details>
 <summary>Notes</summary>
@@ -17,10 +18,11 @@ This code is inspired from <a href="https://www.pyimagesearch.com/2014/08/25/4-p
 ## Installation ##
 - Via [pipx](https://pipxproject.github.io/pipx/) `pipx install image_to_scan` if you want to install inside an isolated environment.
 - Via pip `pip install image_to_scan` to an enviroment of your choice.
+- Download an executable for windows, linux or macos from the [release page](https://github.com/FrancescElies/image-to-scan/releases)
 
 `image-to-scan` depends on `opencv` and `numpy` which together will take around `200MiB`
 
-After installing it an entry point `image-to-scan` will be added.
+If installed with `pip` or `pipx` you should be able to call `image-to-scan` from the command line.
 
 ## Run it ##
 
